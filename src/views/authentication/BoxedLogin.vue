@@ -14,7 +14,7 @@
                 </h2>
                 <h6 class="subtitle-1 text-center">
                   Don't have an account?
-                  <a href="/authentication/BoxedRegister" class>Register</a>
+                  <a href="/authentication/boxedregister" class>Register</a>
                 </h6>
                 <div class="text-center mt-6">
                   <v-chip label class="mr-2 loginButton" color="primary" text-color="white">

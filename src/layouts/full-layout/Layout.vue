@@ -38,7 +38,7 @@
     <!-- ---------------------------------- -->
     <!--- Horizontal Sidebar part -->
     <!-- ---------------------------------- -->
-    <HorizontalSidebar></HorizontalSidebar>
+    <!-- <HorizontalSidebar></HorizontalSidebar> -->
     <!-- ---------------------------------- -->
     <!--- Customizer part -->
     <!-- ---------------------------------- -->
@@ -57,7 +57,7 @@
 <script>
 import HorizontalHeader from "./horizontal-header/HorizontalHeader";
 // import VerticalHeader from "./vertical-header/VerticalHeader";
-import HorizontalSidebar from "./horizontal-sidebar/HorizontalSidebar";
+// import HorizontalSidebar from "./horizontal-sidebar/HorizontalSidebar";
 // import VerticalSidebar from "./vertical-sidebar/VerticalSidebar";
 // import Footer from "./footer/Footer";
 // import HorizontalFooter from "./horizontal-footer/HorizontalFooter";
@@ -69,7 +69,7 @@ export default {
   components: {
     HorizontalHeader,
     // VerticalHeader,
-    HorizontalSidebar
+    // HorizontalSidebar
     // VerticalSidebar,
     // Footer,
     // HorizontalFooter,

@@ -349,7 +349,7 @@
           </v-btn>
         </template>
 
-        <v-list>
+        <v-list v-if="loginStatus">
           <v-list-item
             v-for="(item, i) in userprofile"
             :key="i"

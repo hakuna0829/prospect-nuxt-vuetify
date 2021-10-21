@@ -6,12 +6,12 @@
       <div v-if="color==='primary'">
         <div class="d-flex justify-space-between">
           <div class="pr-4">
-            <h6 class="text-caption mb-1 primary--text font-weight-bold" >
+            <h6 class="text-caption mb-1 primary--text" >
               {{label}}
             </h6>
           </div>
           <div>
-            <h6 class="text-caption mb-1 primary--text font-weight-bold text-right" >
+            <h6 class="text-caption mb-1 primary--text text-right" >
               {{this.valueNum}} / {{this.totalNum}}
             </h6>
           </div>
@@ -26,12 +26,12 @@
       <div v-else>
         <div class="d-flex justify-space-between">
           <div class="pr-4">
-            <h6 class="text-caption mb-1 success--text font-weight-bold" >
+            <h6 class="text-caption mb-1 success--text" >
               {{label}}
             </h6>
           </div>
           <div  >
-            <h6 class="text-caption mb-1 success--text font-weight-bold text-right" >
+            <h6 class="text-caption mb-1 success--text text-right" >
               {{this.valueNum}} / {{this.totalNum}}
             </h6>
           </div>

@@ -23,7 +23,7 @@ const router = new Router({
   routes: [
     {
       path: "/",
-      redirect: "dashboards",
+      redirect: "lists",
       component: () => import("@/layouts/full-layout/Layout"),
       // name: "Overview",
       // path: "dashboards/overview",
@@ -36,45 +36,60 @@ const router = new Router({
       children: [
         // Application
         {
-          name: "Apps",
+          name: "SingleCheck",
           path: "single-check",
           component: () => import("@/views/check/SingleCheck")
         },
         // Application
         {
-          name: "Apps",
+          name: "BulkCheck",
           path: "bulk-check",
           component: () => import("@/views/check/BulkCheck")
         },
         {
-          name: "Apps",
+          name: "API KEY",
           path: "api-key",
           component: () => import("@/views/apikey/APIKey")
         },
         {
-          name: "Apps",
+          name: "Profile",
           path: "profile",
           component: () => import("@/views/profile")
         },
         {
-          name: "Apps",
+          name: "Account Setting",
           path: "account-settings",
           component: () => import("@/views/account-settings")
         },
         {
-          name: "Apps",
+          name: "Billing",
           path: "billing",
           component: () => import("@/views/billing")
         },
         {
-          name: "Apps",
+          name: "Users",
           path: "users",
           component: () => import("@/views/users")
         },
         {
-          name: "Apps",
+          name: "New User",
           path: "new-user",
           component: () => import("@/views/users/new-user")
+        },
+        {
+          name: "Plan",
+          path: "plan",
+          component: () => import("@/views/plan")
+        },
+        {
+          name: "Account",
+          path: "account",
+          component: () => import("@/views/account")
+        },
+        {
+          name: "Lists",
+          path: "lists",
+          component: () => import("@/views/lists")
         },
         // Components
 

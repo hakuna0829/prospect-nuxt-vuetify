@@ -16,11 +16,11 @@
         v-if="navbarColor !== 'white'"
       >
         <div>
-          <a href="https://bestemailverifier.com" target="blank">
+          <a href="https://prospectrole.com">
             <span class="logo-icon">
               <img
                 src="../../../assets/images/prospectShortlogo.png"
-                width="50px"
+                width="30px"
               />
             </span>
           </a>
@@ -88,8 +88,13 @@
       <!-- ---------------------------------- -->
       <v-spacer >
         <template v-if="loginStatus">
-          <v-tabs align-with-title light color="#000">
-            <v-tab >LISTS</v-tab>
+          
+          <v-tabs align-with-title light color="#000" class="topMenu">
+            <v-tab style="height: 100%;" >
+              <router-link to="/lists" class="black--text">
+                LISTS
+              </router-link>
+            </v-tab>
           </v-tabs>
         </template>
       </v-spacer>
@@ -233,7 +238,7 @@
           <ProgressBar label="Searches / Exports" total="1500" value="1252" />
           <ProgressBar label="Verifications" total="20000" value="12025" color="success" />
           <div class="text-center mt-6">
-            <v-btn light class="mr-2 align-self-center" color="#F1C40F">
+            <v-btn light class="mr-2 align-self-center" color="#F1C40F" href="/plan">
               UPGRADE
             </v-btn>
           </div>
@@ -323,7 +328,7 @@
       <!-- ---------------------------------- -->
       <!---User -->
       <!-- ---------------------------------- -->
-      <v-toolbar-title class="align-center black--text d-flex mr-1" v-if="loginStatus">
+      <v-toolbar-title class="align-center black--text d-flex mr-1 userName" v-if="loginStatus">
         Martin Knapic
       </v-toolbar-title>
       <v-menu
@@ -433,9 +438,11 @@ export default {
     ],
     userprofile: [
       { title: "Profile", to: "/profile" },
-      { title: "Settings", to: "/account-settings" },
       { title: "Users", to: "/users" },
       { title: "Billing", to: "/billing" },
+      { title: "Plan", to: "/plan" },
+      { title: "Account", to: "/account" },
+      // { title: "Settings", to: "/account-settings" },      
       // { title: "Account Setting", to: "/form-layouts/flformbasic" },
       { title: "Sign out", to: "/authentication/boxedlogin" }
     ],
@@ -486,8 +493,27 @@ export default {
 
 .horizontal-header {
   box-shadow: 0px 5px 3px rgb(0 0 0 / 20%) !important;
+  .v-toolbar__content {
+    padding-top: 0px;
+    padding-bottom: 0px;
+    height: 100%;
+    .container {
+      height: 100%;
+      
+    }
+  }
 }
 
+.topMenu {
+  height: 100%;
+  .v-item-group { 
+    height: 100%;
+  }
+}
+
+.userName {
+  font-size: 1rem;
+}
 @media (min-width: 1024px) {
   .horizontalstyle {
     .logo-width {

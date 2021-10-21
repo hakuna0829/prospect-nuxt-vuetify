@@ -147,7 +147,7 @@ export default {
     submit() {
       this.$refs.form.validate();
       if (this.$refs.form.validate(true)) {
-        this.$router.push({ path: "/dashboards" });
+        this.$router.push({ path: "/lists" });
       }
     },
     handleBack() {

@@ -1,5 +1,5 @@
 <template>
-  <v-container fluid class="down-top-padding" id="verify">
+  <v-container fluid class="down-top-padding">
     <BaseBreadcrumb
       :title="page.title"
       :icon="page.icon"

@@ -8,7 +8,7 @@
         <v-row align="center">
           <v-col class="grow">LISTS</v-col>
           <v-col class="shrink">
-            <v-btn color="primary">NEW LIST</v-btn>
+            <v-btn color="primary" @click="toggleOpen()">NEW LIST</v-btn>
           </v-col>
         </v-row>
         <v-data-table

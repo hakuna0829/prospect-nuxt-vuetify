@@ -27,7 +27,20 @@
           <DataTable @changeOpen="handleNewDlg($event)"></DataTable>
         </BaseCard>
       </v-col>
+      <v-col cols="12" sm="12" lg="6">
+        <!-- <BaseCard heading="Dialogs - Form"> -->
+        <DialogsForm
+          :open="newDlg"
+          @changeOpen="handleNewDlg($event)"
+          @handleSnackBar="handleSnackBar($event)"
+        ></DialogsForm>
+
+        <!-- </BaseCard> -->
+      </v-col>
     </v-row>
+    <v-snackbar v-model="snackbar" absolute top right color="success">
+      New List Item has been successfully created
+    </v-snackbar>
   </v-container>
 </template>
 
@@ -38,6 +51,7 @@ export default {
   data: () => ({
     extension: true,
     newDlg: false,
+    snackbar: false,
     page: {
       title: "LISTS"
     },
@@ -62,10 +76,14 @@ export default {
   methods: {
     handleNewDlg() {
       this.newDlg = !this.newDlg;
+    },
+    handleSnackBar(val) {
+      this.snackbar = val;
     }
   },
   components: {
-    DataTable: () => import("./table-data/DataTable")
+    DataTable: () => import("./table-data/DataTable"),
+    DialogsForm: () => import("./DialogsForm")
   }
 };
 </script>

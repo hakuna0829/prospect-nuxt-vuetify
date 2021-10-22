@@ -10,7 +10,7 @@
             <span class="headline">Delete</span>
           </v-card-title>
           <v-card-text>
-            Are you sure you want to delete the user?
+            Are you sure you want to delete this list item?
           </v-card-text>
           <v-card-actions>
             <v-spacer></v-spacer>

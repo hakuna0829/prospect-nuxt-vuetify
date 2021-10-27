@@ -20,7 +20,7 @@
             <span class="logo-icon">
               <img
                 src="../../../assets/images/prospectShortlogo.png"
-                width="30px"
+                width="27px"
               />
             </span>
           </a>
@@ -226,7 +226,7 @@
         transition="scale-transition"
       >
         <template v-slot:activator="{ on }">
-          <v-btn light v-on="on" class="mr-2 align-self-center text-capitalize" color="#F1C40F">
+          <v-btn light v-on="on" class="mr-2 align-self-center text-capitalize px-lg-6" color="#F1C40F">
             <!-- <v-badge color="red" dot>
               <v-icon>mdi mdi-cloud-download</v-icon>
             </v-badge> -->
@@ -328,7 +328,7 @@
       <!-- ---------------------------------- -->
       <!---User -->
       <!-- ---------------------------------- -->
-      <v-toolbar-title class="align-center black--text d-flex mr-1 userName" v-if="loginStatus">
+      <v-toolbar-title class="align-center black--text d-flex ms-2 ms-lg-4 mr-1 userName" v-if="loginStatus">
         Martin Knapic
       </v-toolbar-title>
       <v-menu
@@ -486,8 +486,8 @@ export default {
 }
 
 .logoTitle {
-  font-family: "Open Sans", sans-serif;
-  font-weight: 700;
+  font-family: "Roboto", sans-serif;
+  font-weight: 600;
   color: #2b2b2b;
 }
 
@@ -513,6 +513,9 @@ export default {
 
 .userName {
   font-size: 1rem;
+}
+.v-tabs-slider-wrapper {
+  height: 3px !important;
 }
 @media (min-width: 1024px) {
   .horizontalstyle {

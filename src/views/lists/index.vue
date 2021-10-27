@@ -1,8 +1,8 @@
 <template>
   <v-container fluid class="down-top-padding" id="verify">
       <!-- icon background #c6e0f9 -->
-    <div class="tooltip d-block d-md-flex justify-space-between" v-if="extension">
-        <div class="d-flex ">
+    <div class="tooltip d-block d-md-flex justify-space-between align-center" v-if="extension">
+        <div class="d-flex align-center">
             <v-icon large color="#1e88e5" class="mr-2">mdi-shield-lock-outline  </v-icon>
             You won't be able to leverage the full potential of Prospect Role without the Extension. Please install the extension and refresh the site.
         </div>

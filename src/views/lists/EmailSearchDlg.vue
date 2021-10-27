@@ -116,6 +116,7 @@ export default {
   },
   methods: {
     toggleOpen() {
+      this.searching = false;
       this.$emit("changeOpen");
     },
     searchEmail() {

@@ -1,27 +1,9 @@
 <template>
   <v-container fluid class="down-top-padding" id="verify">
-      <!-- icon background #c6e0f9 -->
-    <div class="tooltip d-block d-md-flex justify-space-between" v-if="extension">
-        <div class="d-flex ">
-            <v-icon large color="#1e88e5" class="mr-2">mdi-shield-lock-outline  </v-icon>
-            You won't be able to leverage the full potential of Prospect Role without the Extension. Please install the extension and refresh the site.
-        </div>
-        <div class="d-flex">
-            <v-btn light class="mr-2 align-self-center text-capitalize white--text" color="#F1C40F" href="https://chrome.google.com/webstore/detail/prospect-role-find-email/dalaacnaanmifofialpomlklmnkknmkk?hl=en" target="blank">
-                <v-icon>mdi mdi-google-chrome  </v-icon>
-                Get Extension
-            </v-btn>
-            <v-btn light class="align-self-center text-capitalize white--black " color="#FFF" @click="extension=false">
-                Close
-            </v-btn>
-        </div>
-    </div>
-    <BaseBreadcrumb
-      :title="page.title"
-      :icon="page.icon"
-      :breadcrumbs="breadcrumbs"
-    ></BaseBreadcrumb>
     <v-row>
+      <v-col cols="12" md="4">
+       
+      </v-col>
       <v-col cols="12" sm="12">
         <BaseCard>
           <DataTable @changeOpen="handleNewDlg($event)"></DataTable>
@@ -63,16 +45,6 @@ export default {
       }
     ]
   }),
-  computed: {
-    top () {
-        switch (this.$vuetify.breakpoint.name) {
-            case 'xs': return 'top: 0'
-            case 'sm': return 'top: 0'
-            // case 'md': return 'top: 0'
-            default: return 'top: -70px'
-        }
-    },
-  },
   methods: {
     handleNewDlg() {
       this.newDlg = !this.newDlg;
@@ -82,7 +54,7 @@ export default {
     }
   },
   components: {
-    DataTable: () => import("./table-data/DataTable"),
+    DataTable: () => import("./table-data/DataTableDetail"),
     DialogsForm: () => import("./DialogsForm")
   }
 };

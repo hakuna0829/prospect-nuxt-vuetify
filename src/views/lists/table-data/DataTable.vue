@@ -29,7 +29,9 @@
               </div>
               
               <div class="ml-2">
-                <div>{{item.label}}</div>
+                <router-link :to='viewlink(item)' class="black--text">
+                  <div>{{item.label}}</div>
+                </router-link>
                 <div class="text--caption">{{item.date}}</div>
               </div>
               <template v-if="item.static">
@@ -115,7 +117,7 @@ export default {
     selectedName: "",
     snackbar: false,
     headers: [
-      { text: "", value: "label", filterable: false },
+      { text: "", value: "label", filterable: false, sortable: false },
       { text: "Prospects", value: "prospect", sortable: true },
       { text: "Emails", value: "email", filterable: false },
       { text: "Created", value: "created", filterable: false },
@@ -125,8 +127,10 @@ export default {
       { text: "", value: "remove", filterable: false, sortable: false }
     ],
     icons: { mdiDelete },
+    id: window.location.pathname.split('/')[2], //this is the id from the browser
     data: [
       {
+        id:1,
         label: "All Extension prospects",
         date: "Jan 9, 2014",
         static: true,
@@ -145,6 +149,7 @@ export default {
         ]  
       },
       {
+        id:2,
         label: "All Ceos from UK",
         date: "Feb 19, 2014",
         static: false,
@@ -165,11 +170,16 @@ export default {
     ]
   }),
    computed: {
-    
+    // viewlink(item) {
+    //   return 'detail-list/'+item.id;
+    // }
   },
   methods: {
     contributors (items) {
       return items.map((item, i) => {return <p key={i}>{item}</p>})
+    },
+    viewlink(item) {
+      return 'detail-list/'+item.id;
     },
     closeAlert() {
       this.selectedName = "";

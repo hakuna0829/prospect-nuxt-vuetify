@@ -91,6 +91,11 @@ const router = new Router({
           path: "lists",
           component: () => import("@/views/lists")
         },
+        {
+          name: "Lists Detail",
+          path: "detail-list/:id",
+          component: () => import("@/views/lists/DetailList")
+        },
         // Components
 
         {

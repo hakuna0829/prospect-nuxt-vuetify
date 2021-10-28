@@ -16,18 +16,16 @@
         v-if="navbarColor !== 'white'"
       >
         <div>
-          <a href="https://prospectrole.com">
-            <span class="logo-icon">
-              <img
-                src="../../../assets/images/prospectShortlogo.png"
-                width="27px"
-              />
-            </span>
+          <a href="https://prospectrole.com" class="d-flex">
+            <img
+              src="../../../assets/images/prospectShortlogo.png"
+              width="27px"
+            />
           </a>
         </div>
 
         <p
-          class="logo-text ml-2 mb-1 logoTitle"
+          class="logo-text ml-2 mb-0 logoTitle"
           :class="`${showLogo ? '' : 'hidelogo'}`"
         >
           PROSPECT ROLE

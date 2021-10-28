@@ -482,7 +482,7 @@ export default {
         {text: 'Added', value: 'created', type: 'date'},
     ],
       pagination: {
-          sortBy: 'lastName',
+          sortBy: 'last_name',
           rowsPerPage: -1,
       },
       filterDefs: {

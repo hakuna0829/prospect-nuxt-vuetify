@@ -96,77 +96,30 @@ const router = new Router({
           path: "detail-list/:id",
           component: () => import("@/views/lists/DetailList")
         },
-        // Components
-
-        {
-          name: "Flex",
-          path: "style-animation/flex",
-          component: () => import("@/views/style-animation/Flex")
-        },
-        {
-          name: "Float",
-          path: "style-animation/float",
-          component: () => import("@/views/style-animation/Float")
-        },
-        {
-          name: "Spacing",
-          path: "style-animation/spacing",
-          component: () => import("@/views/style-animation/Spacing")
-        },
-        {
-          name: "Text",
-          path: "style-animation/text",
-          component: () => import("@/views/style-animation/Text")
-        },
-        {
-          name: "Typography",
-          path: "style-animation/typography",
-          component: () => import("@/views/style-animation/Typography")
-        },
-        {
-          name: "Transitions",
-          path: "style-animation/transitions",
-          component: () => import("@/views/style-animation/Transitions")
-        },
-        {
-          name: "ProgrammaticScrolling",
-          path: "style-animation/scroll",
-          component: () => import("@/views/style-animation/Scroll")
-        },
-        {
-          name: "ApexCharts",
-          path: "charts/apexcharts",
-          component: () => import("@/views/charts/apexcharts/ApexCharts")
-        },
-        {
-          name: "Analytical",
-          path: "dashboards/analytical",
-          component: () => import("@/views/dashboards/analytical/Analytical")
-        },
-        {
-          name: "Classic",
-          path: "dashboards/classic",
-          component: () => import("@/views/dashboards/classic/Classic")
-        },
-        {
-          name: "Demographical",
-          path: "dashboards/demographical",
-          component: () =>
-            import("@/views/dashboards/demographical/Demographical")
-        },
-        {
-          name: "Minimal",
-          path: "dashboards/minimal",
-          component: () => import("@/views/dashboards/minimal/Minimal")
-        },
-        {
-          name: "Overview",
-          path: "dashboards",
-          component: () => import("@/views/dashboards/overview/Overview")
-        }
       ]
     },
-
+    // admin path
+    {
+      path: "/admin",
+      component: () => import("@/layouts/admin-layout/Layout"),
+      children: [
+        {
+          name: "Admin users list",
+          path: "users",
+          component: () => import("@/views/admin/users")
+        },
+        {
+          name: "Admin company list",
+          path: "company",
+          component: () => import("@/views/admin/company")
+        },
+        {
+          name: "Admin new company",
+          path: "new-company",
+          component: () => import("@/views/admin/company/new-company")
+        },
+      ]
+    },
     {
       path: "/authentication",
       component: () => import("@/layouts/blank-layout/Blanklayout"),

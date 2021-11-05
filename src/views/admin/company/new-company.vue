@@ -19,8 +19,8 @@
       v-model="snackbar_success"
       top
       right
-      color="success"
-      style="padding-top:125px"
+      color="black"
+      style="padding-top:80px"
     >
       User has been invited. You can inform them to check their email.
     </v-snackbar>
@@ -29,7 +29,7 @@
       top
       right
       color="error"
-      style="padding-top:125px"
+      style="padding-top:80px"
     >
       Something went wrong. Please try again later or contact our support team.
     </v-snackbar>
@@ -48,9 +48,14 @@ export default {
     snackbar_error: false,
     breadcrumbs: [
       {
-        text: "New Company",
+        text: "Companies",
         disabled: false,
-        to: "/admin/new-company"
+        to: "/admin/company"
+      },
+      {
+        text: "Add New Company",
+        disabled: true,
+        to: "/admin/company"
       }
     ],
     name: "Martin",

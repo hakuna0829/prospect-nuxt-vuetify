@@ -6,7 +6,7 @@
     <div class="">
       <v-card>
         <v-row align="center">
-          <v-col class="grow">Companies</v-col>
+          <v-col class="grow"></v-col>
           <v-col class="shrink">
             <v-btn color="primary" to="/admin/new-company">Add Company</v-btn>
           </v-col>
@@ -133,8 +133,9 @@
           class="border"
           show-select
           v-model="selectedRows"
+           :options="options"
           :footer-props="{
-            'items-per-page-options': [10, 50, 200, -1]
+            'items-per-page-options': [10, 50, 100, -1]
           }"
         >
         
@@ -169,11 +170,20 @@
           @handleSnackBar="handleSnackBar($event)"
         ></DeleteDialog>
         <v-snackbar
+          v-model="action_snackbar"
+          top
+          right
+          color="black"
+          style="padding-top:80px"
+        >
+          {{actionNotification}}
+        </v-snackbar>
+        <v-snackbar
           v-model="snackbar"
           top
           right
-          color="success"
-          style="padding-top:125px"
+          color="black"
+          style="padding-top:80px"
         >
           The user has been successfully deleted
         </v-snackbar>
@@ -185,7 +195,8 @@
 <script>
 import { mdiDelete } from "@mdi/js";
 import moment from 'moment';
-import logo from '../../../../assets/images/prospectShortlogo.png';
+// import logo from '../../../../assets/images/prospectShortlogo.png';
+import json from "./companies_data.json";
 
 export default {
   name: "DataTable",
@@ -196,6 +207,7 @@ export default {
     selectedName: "",
     selectedRows: [],
     snackbar: false,
+    action_snackbar: false,
     actionItems:['Change plan', 'Add seats', 'Delete company'],
     actionSubItems: ['Free Trial', 'Enterprise Tier 1', 'Enterprise Tier 2', 'Enterprise Tier 3', 'Freeze'],
     actionSubItems2: [0, 1,2,3,4,5,6,7,8,9,10],
@@ -240,26 +252,11 @@ export default {
     filterTermRules: [],
     dateFilterFormat: 'DD MMM YY HH:mm A',
     icons: { mdiDelete },
-    data: [
-      {
-        id: 1,
-        logo: logo,
-        name: "Prospect Role",
-        siteUrl: "https://prospectrole.com",
-        address: "Rue de I'Ale",
-        city: "Lausanne",
-        country: "Switzerland"
-      },
-      {
-        id:2,
-        logo: logo,
-        name: "Wedding Dress",
-        siteUrl: "https://weddingdress.com",
-        address: "Lindon Street 2",
-        city: "Lausanne",
-        country: "Switzerland"
-      }
-    ]
+    actionNotification: '',
+    data: json.data,
+    options: {
+      itemsPerPage: 100
+    }, 
   }},
   computed: {
     filteredData () {
@@ -323,6 +320,7 @@ export default {
     rowClicked(row) {
       this.swapSelectionStatus(row.id);
       this.log(row);
+      
     },
     swapSelectionStatus(keyID) {
       if (this.selectedRows.includes(keyID)) {
@@ -347,7 +345,9 @@ export default {
     removeItem() {
       const index = this.data.indexOf(this.selectedName);
       this.data.splice(index, 1);
-      this.selectedName = null;
+      // this.selectedName = null;
+       this.selectedRows = [];
+      this.action_snackbar = true;
     },
     handleDeleteDlg() {
       this.showAlert = false;
@@ -359,6 +359,20 @@ export default {
       this.actionSubmit = true;
       setTimeout(() => {
         this.actionSubmit = false;
+        if(this.mainAction === 'Change plan'){
+          this.actionNotification = 'Changes successfully updated.';
+          this.action_snackbar = true;
+        }
+        if(this.mainAction === 'Add seats'){
+          this.actionNotification = 'The seats have been added to selected users.';
+          this.action_snackbar = true;
+        }
+        if(this.mainAction === 'Delete company'){
+           this.confirmDelete('1');
+          this.actionNotification = 'Selected companies have been deleted successfully.';
+        }
+        
+        
       }, [2000]);
     },
     changeMainAction(obj){
@@ -389,9 +403,45 @@ export default {
     rulesIsValidDate (value) {
         return moment(value, 'DD/MM/YYYY', true).isValid()
     },
+    makeDummyDataJson () {
+      let newJson = [];
+       Array(200).fill('').map((i, index)=>{
+        //  let item = {
+        //     id: index+1,
+        //     logo: logo,
+        //     name: "Prospect Role1",
+        //     siteUrl: "https://prospectrole.com",
+        //     address: "Rue de I'Ale",
+        //     city: "Lausanne",
+        //     country: "Switzerland"
+        //   }
+         let item = {
+          id:index+1,
+          linkedin_url: 'https://www.linkedin.com/in/martinknapic/',
+          company_url: 'https://www.linkedin.com/company/prospect-role/',
+          first_name: 'Martin',
+          last_name: 'Knapic',
+          email: 'knapic@gmail.com',
+          email_verify: true,
+          domain: 'prospectrole.com',
+          role: 'Product Manager',
+          country: 'Switzerland',
+          city: 'Lausanne',
+          company: 'Crystal Ltd',
+          sector: 'Information technology',
+          created: "2021-10-02T05:00:00.000Z",
+          avartar:
+            "https://ca.slack-edge.com/TN86UQ97H-US929HJSE-g28806d23364-512"
+          }
+          newJson.push(item);
+       })
+      console.log('dummy json', newJson);
+    },
     // ---------- Events ------------------------
     onClearAllFilters () {
+        this.clearFilterTerms()
         this.filterField = 'name'
+        this.makeDummyDataJson()
     },
     // ---------- field filter methods ----------
     filterByTextContains (list, fieldName, fieldValue) {
@@ -485,7 +535,7 @@ export default {
 
 .email {
   margin: 0px;
-  max-width: 100px;
+  max-width: 160px;
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;

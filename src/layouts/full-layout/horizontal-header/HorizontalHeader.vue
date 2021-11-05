@@ -7,7 +7,7 @@
     :color="navbarColor"
     :dark="navbarColor !== 'white'"
   >
-    <v-container class="py-0 d-flex">
+    <v-container class="py-0 d-flex" fluid>
       <!-- ---------------------------------- -->
       <!--- light Logo part -->
       <!-- -------------------- :class="`${showLogo ? 'logo-width' : ''}`" -------------- -->

@@ -6,7 +6,7 @@
     <div class="">
       <v-card>
         <v-row align="center">
-          <v-col class="grow">Company users</v-col>
+          <v-col class="grow"></v-col>
           <v-col class="shrink">
             <v-btn color="primary" to="/new-user">Add new user</v-btn>
           </v-col>
@@ -53,8 +53,8 @@
           v-model="snackbar"
           top
           right
-          color="success"
-          style="padding-top:125px"
+          color="black"
+          style="padding-top:80px"
         >
           The user has been successfully deleted
         </v-snackbar>

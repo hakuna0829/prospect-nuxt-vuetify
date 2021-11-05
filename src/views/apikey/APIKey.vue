@@ -22,7 +22,7 @@
         <!-- </BaseCard> -->
       </v-col>
     </v-row>
-    <v-snackbar v-model="snackbar" absolute top right color="success">
+    <v-snackbar v-model="snackbar" absolute top right color="black">
       New API key has been successfully created
     </v-snackbar>
   </v-container>

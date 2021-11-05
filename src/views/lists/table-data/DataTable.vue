@@ -4,9 +4,9 @@
   <!-- ----------------------------------------------------------------------------- -->
   <div>
     <div class="">
-      <v-card>
+      <v-card style="box-shadow:none;">
         <v-row align="center">
-          <v-col class="grow">LISTS</v-col>
+          <v-col class="grow"></v-col>
           <v-col class="shrink">
             <v-btn color="primary" @click="toggleOpen()">NEW LIST</v-btn>
           </v-col>
@@ -14,11 +14,13 @@
         <v-data-table
           :headers="headers"
           :items="data"
-          item-key="createdDate"
+          item-key="id"
           class="border"
+          :custom-sort="customSort"
           :footer-props="{
-            'items-per-page-options': [10, 50, 200, -1]
+            'items-per-page-options': [10, 50, 100, -1]
           }"
+          :options="options"
         >
           <template v-slot:item.label="{ item }">
             <div class="email d-flex align-item-center">
@@ -96,8 +98,8 @@
           v-model="snackbar"
           top
           right
-          color="success"
-          style="padding-top:125px"
+          color="black"
+          style="padding-top:80px"
         >
           The user has been successfully deleted
         </v-snackbar>
@@ -108,14 +110,20 @@
 
 <script>
 import { mdiDelete } from "@mdi/js";
+import moment from 'moment';
+import json from './lists_data.json'
 
 export default {
   name: "DataTable",
+  props: ["added"],
 
   data: () => ({
     showAlert: false,
     selectedName: "",
     snackbar: false,
+    options: {
+      itemsPerPage: 100
+    }, 
     headers: [
       { text: "", value: "label", filterable: false, sortable: false },
       { text: "Prospects", value: "prospect", sortable: true },
@@ -128,51 +136,19 @@ export default {
     ],
     icons: { mdiDelete },
     id: window.location.pathname.split('/')[2], //this is the id from the browser
-    data: [
-      {
-        id:1,
-        label: "All Extension prospects",
-        date: "Jan 9, 2014",
-        static: true,
-        prospect: 130,
-        email: 120,
-        created: "10-Oct-2021 10:35 PM",
-        lastUpdated: "15-Oct-2021 08:25 PM",
-        owner: "Martin Knapic",
-        avartar:
-          "https://ca.slack-edge.com/TN86UQ97H-US929HJSE-g28806d23364-512",
-        contributors:[
-          "https://ca.slack-edge.com/TGUK83BPA-U01KTG7MK34-g19920895070-512",
-          "https://ca.slack-edge.com/TN86UQ97H-US929HJSE-g28806d23364-512",
-          "https://ca.slack-edge.com/TGUK83BPA-U01KTG7MK34-g19920895070-512",
-          "https://ca.slack-edge.com/TN86UQ97H-US929HJSE-g28806d23364-512"
-        ]  
-      },
-      {
-        id:2,
-        label: "All Ceos from UK",
-        date: "Feb 19, 2014",
-        static: false,
-        prospect: 230,
-        email: 250,
-        created: "10-Oct-2021 10:35 PM",
-        lastUpdated: "15-Oct-2021 08:25 PM",
-        owner: "Martin Knapic",
-        avartar:
-          "https://ca.slack-edge.com/TN86UQ97H-US929HJSE-g28806d23364-512",
-        contributors:[
-          "https://ca.slack-edge.com/TN86UQ97H-US929HJSE-g28806d23364-512",
-          "https://ca.slack-edge.com/TGUK83BPA-U01KTG7MK34-g19920895070-512",
-          "https://ca.slack-edge.com/TN86UQ97H-US929HJSE-g28806d23364-512",
-          "https://ca.slack-edge.com/TGUK83BPA-U01KTG7MK34-g19920895070-512"
-        ]  
-      }
-    ]
+    data: json.data
   }),
    computed: {
     // viewlink(item) {
     //   return 'detail-list/'+item.id;
     // }
+  },
+  watch: {
+    added: function(newVal) {
+      if(newVal){
+        this.addNewRow();
+      }
+    }
   },
   methods: {
     contributors (items) {
@@ -187,6 +163,45 @@ export default {
     },
     toggleOpen() {
       this.$emit("changeOpen");
+    },
+    customSort(items, index, isDesc) {
+      console.log(items, index[0], isDesc, typeof index)
+      items.sort((a, b) => {
+          if(a.static === true ) return -1;
+          if(b.static === true ) return 1;
+          if (!isDesc) {
+            return a[index] < b[index] ? -1 : 1;
+          } else {
+            return b[index] < a[index] ? -1 : 1;
+          }
+      });
+      return items;
+    },
+    addNewRow() {
+      const dataLength = this.data.length;
+      const newRow = {
+        id: dataLength + 1,
+        label: " ",
+        date: '',//moment().format("MMM d, YYYY"),
+        static: false,
+        prospect: 0,
+        email: 0,
+        created: moment().format("DD-MM-YYYY hh:mm A"),
+        lastUpdated: moment().format("DD-MM-YYYY hh:mm A"),
+        owner: "Martin Knapic",
+        avartar:
+          "https://ca.slack-edge.com/TN86UQ97H-US929HJSE-g28806d23364-512",
+        contributors:[
+          "https://ca.slack-edge.com/TGUK83BPA-U01KTG7MK34-g19920895070-512",
+        ]  
+      }
+      console.log('newRow', newRow)
+                    // starting with the index where
+       console.log(this.data.findIndex( elt => elt.static === false))
+       const index = this.data.findIndex( elt => elt.static === false)
+       this.data.splice(index, 0, newRow)
+       console.log('updated...', this.data)
+      // this.data.filter((item) => )
     },
     confirmDelete(item) {
       this.showAlert = true;

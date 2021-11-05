@@ -37,10 +37,19 @@
               </v-list-item-content>
             </v-list-item>
           </v-list>
-          <BasicInformation></BasicInformation>
+          <BasicInformation  @handleSnackBar="handleSnackBar($event)"></BasicInformation>
         </BaseCard>
       </v-col>
     </v-row>
+    <v-snackbar
+      v-model="snackbar"
+      top
+      right
+      color="black"
+      style="padding-top:80px"
+    >
+      Changes have been saved.
+    </v-snackbar>
   </v-container>
 </template>
 
@@ -60,6 +69,7 @@ export default {
       }
     ],
     name: "Martin",
+    snackbar: false,
     avatar: "https://ca.slack-edge.com/TGUK83BPA-U01KTG7MK34-g19920895070-512",
     filelist: [] // Store our uploaded files
   }),
@@ -69,6 +79,9 @@ export default {
     },
     onButtonClick() {
       this.$refs.file.click();
+    },
+    handleSnackBar(val) {
+      this.snackbar = val;
     },
     onChange() {
       console.log(

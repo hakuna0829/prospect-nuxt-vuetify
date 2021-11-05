@@ -145,13 +145,15 @@
 @media (min-width: 1264px) {
   .horizontalstyle {
     .v-main {
-      max-width: 1185px;
+      // max-width: 1185px;
+      max-width: 100%;
     }
     .horizontal-navbar {
       .first-level {
         &.mega-dropdown {
           .second-level {
-            max-width: 1185px;
+            // max-width: 1185px;
+            max-width: 100%;
           }
         }
       }
@@ -162,13 +164,15 @@
 @media (min-width: 1904px) {
   .horizontalstyle {
     .v-main {
-      max-width: 1785px;
+      // max-width: 1785px;
+      max-width: 100%;
     }
     .horizontal-navbar {
       .first-level {
         &.mega-dropdown {
           .second-level {
-            max-width: 1785px;
+            // max-width: 1785px;
+            max-width: 100%;
           }
         }
       }

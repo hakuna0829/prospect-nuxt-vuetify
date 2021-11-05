@@ -38,7 +38,7 @@ export default {
     submit() {
       this.$emit("changeOpen");
       this.$emit("removeItem");
-      this.$emit("handleSnackBar", true);
+      // this.$emit("handleSnackBar", true);
     }
   }
 };

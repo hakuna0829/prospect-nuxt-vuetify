@@ -6,16 +6,8 @@
     <div class="">
       <v-card>
         <v-row align="center">
-          <v-col class="grow">LISTS/All Extension Prospects 
-            <template >
-                <v-chip
-                class="ma-2 white--text text-sm"
-                small
-                color="#6D9DFF"
-              >
-                STATIC LIST
-              </v-chip>
-            </template>
+          <v-col class="grow">
+            
           </v-col>
           <v-col class="shrink">
             <v-btn color="primary" @click="toggleOpen()">ADD PROSPECT</v-btn>
@@ -41,7 +33,7 @@
                   </v-list-item>
                 </v-list>
               </v-menu>
-              <v-menu v-if="mainAction !== ''">
+              <v-menu v-if="mainAction === 'Copy to list'">
                 <template v-slot:activator="{ on, attrs }" >
                   <v-btn
                     v-bind="attrs"
@@ -52,14 +44,14 @@
                   </v-btn>
                 </template>
 
-                <v-list>
+                <v-list style="max-height: 490px" class="overflow-y-auto">
                   <v-list-item @click="changeSubAction(item)" v-for="(item, i) in actionSubItems" :key="i">
                     <v-list-item-title>{{item}}</v-list-item-title>
                   </v-list-item>
                 </v-list>
               </v-menu>
               <v-btn
-                v-if="subAction !== ''"
+                v-if="mainAction !== '' && mainAction !== 'Copy to list' "
                 class="rounded-lg primary mt-2"
                 @click="handleActionSubmit"
               >
@@ -162,17 +154,26 @@
         <v-data-table
           :headers="headers"
           :items="filteredData"
-          item-key="label"
+          item-key="id"
           class="border"
-           show-select
-           
+          show-select
+          v-model="selectedItem" 
+          :options="options"
           :footer-props="{
-            'items-per-page-options': [10, 50, 200, -1]
+            'items-per-page-options': [10, 50, 100, -1]
           }"
         >
+          <!-- <template v-slot:item.data-table-select="{ on, props }">
+            <v-simple-checkbox color="green" v-bind="props" v-on="on"></v-simple-checkbox>
+          </template> -->
           <template v-slot:item.id="{ item }">
             <div  class="d-flex align-center">
-              <v-icon color="#0097d3">mdi-linkedin</v-icon>
+              <a :href="item.linkedin_url"
+                class="profile_link mx-3"
+                target="_blank">
+                <v-icon color="#0097d3">mdi-linkedin</v-icon>
+              </a>
+              
               <v-menu
                 bottom
                 left
@@ -183,6 +184,7 @@
                 <template v-slot:activator="{ on }">
                   <v-btn icon v-on="on" class="mr-1 align-self-center">
                     <v-icon>mdi-dots-horizontal</v-icon>
+                  
                   </v-btn>
                 </template>
                 <v-list>
@@ -193,7 +195,7 @@
                       <v-edit-dialog
                         :return-value.sync="item.linkedin_url"                      
                       >
-                        Edit profile
+                        Edit URL
                         <template v-slot:input>
                           <v-text-field
                             v-model="item.linkedin_url"
@@ -256,9 +258,12 @@
             </v-edit-dialog>
           </template>
           <template v-slot:item.email="{ item }">
-            <v-edit-dialog
+            <!-- <v-edit-dialog
               v-if="!!item.email"
               :return-value.sync="item.email"
+              large
+              @open="openEmail(item.email)"
+              @save="saveEmail(item.email, item)"
             >
               <div >{{ item.email  }}</div>
               <template v-slot:input>
@@ -271,7 +276,8 @@
                   autofocus
                 ></v-text-field>
               </template>
-            </v-edit-dialog>
+            </v-edit-dialog> -->
+            <div @click="openSearchEmail(item)">{{ item.email }}</div>
             <v-btn v-if="!item.email" class="missingBtn"  @click="openSearchEmail(item)" color="#FFF4D4"><span>Find Email</span></v-btn>
           </template>
           <template v-slot:item.email_verify="{ item }">
@@ -288,7 +294,7 @@
               <template v-slot:input>
                 <v-text-field
                   v-model="item.domain"
-                  :rules="[max25chars]"
+                  :rules="[max200chars]"
                   label="Edit"
                   single-line
                   counter
@@ -306,7 +312,7 @@
               <template v-slot:input>
                 <v-text-field
                   v-model="item.role"
-                  :rules="[max25chars]"
+                  :rules="[max200chars]"
                   label="Edit"
                   single-line
                   counter
@@ -323,7 +329,7 @@
               <template v-slot:input>
                 <v-text-field
                   v-model="item.country"
-                  :rules="[max25chars]"
+                  :rules="[max200chars]"
                   label="Edit"
                   single-line
                   counter
@@ -341,7 +347,7 @@
               <template v-slot:input>
                 <v-text-field
                   v-model="item.city"
-                  :rules="[max25chars]"
+                  :rules="[max200chars]"
                   label="Edit"
                   single-line
                   counter
@@ -353,7 +359,11 @@
 
           <template v-slot:item.company="{ item }">
             <div  class="d-flex align-center">
-              <v-icon color="#0097d3">mdi-linkedin</v-icon>
+              <a :href="item.company_url"
+                class="profile_link mx-3"
+                target="_blank">
+                <v-icon color="#0097d3">mdi-linkedin</v-icon>
+              </a>
               <v-menu
                 bottom
                 left
@@ -372,9 +382,10 @@
                   >
                     <v-list-item-title>
                       <v-edit-dialog
+                        width="unset"
                         :return-value.sync="item.company_url"                      
                       >
-                        Edit profile
+                        Edit URL
                         <template v-slot:input>
                           <v-text-field
                             v-model="item.company_url"
@@ -398,7 +409,22 @@
                   </v-list-item>
                 </v-list>
               </v-menu> 
-              <div class="email">{{item.company}}</div>
+              <v-edit-dialog
+                :return-value.sync="item.company"
+              >
+                <div class="email">{{ item.company }}</div>
+                <template v-slot:input>
+                  <v-text-field
+                    v-model="item.company"
+                    :rules="[max200chars]"
+                    label="Edit"
+                    single-line
+                    counter
+                    autofocus
+                  ></v-text-field>
+                </template>
+              </v-edit-dialog>
+              <!-- <div class="email">{{item.company}}</div> -->
             </div>
           </template>
 
@@ -425,6 +451,12 @@
           </template>
           
         </v-data-table>
+        <DeleteDialog
+          :open="showAlert"
+          @changeOpen="handleDeleteDlg($event)"
+          @removeItem="removeItem($event)"
+          @handleSnackBar="handleSnackBar($event)"
+        ></DeleteDialog>
         <EmailSearchDlg 
           :open="showEmailSearch"
           @changeOpen="handleEmailSearchDlg($event)"
@@ -435,10 +467,38 @@
           v-model="snackbar"
           top
           right
-          color="success"
-          style="padding-top:125px"
+          color="black"
+          style="padding-top:80px"
         >
           The user has been successfully deleted
+        </v-snackbar>
+        <v-snackbar
+          v-model="copy_list_snackbar"
+          :timeout="-1"
+          top
+          right
+          color="black"
+          style="padding-top:80px"
+        >
+          Records copied to the selected list.
+          <template v-slot:action="{ attrs }">
+            <v-btn
+              color="indigo"
+              text
+              v-bind="attrs"
+              @click="copy_list_snackbar = false"
+            >
+              Open List
+            </v-btn>
+            <v-btn
+              color="indigo"
+              text
+              v-bind="attrs"
+              @click="copy_list_snackbar = false"
+            >
+              Close
+            </v-btn>
+          </template>
         </v-snackbar>
       </v-card>
     </div>
@@ -448,6 +508,7 @@
 <script>
 import { mdiDelete } from "@mdi/js";
 import moment from 'moment';
+import json from './lists_detail_data.json'
 // import { filter } from 'vue/types/umd';
 
 export default {
@@ -467,20 +528,20 @@ export default {
       { text: "Company", value: "company", filterable: false },
       { text: "Sector", value: "sector", filterable: false },
       { text: "Added", value: "created", filterable: false },
-    ],
-    filterFields: [
-        {text: 'First', value: 'first_name', type: 'text'},
-        {text: 'Last', value: 'last_name', type: 'text'},
-        {text: 'Emails', value: 'email', type: 'text'},
-        {text: 'Email Verified', value: 'email_verify', type: 'lookup'},
-        {text: 'Domain', value: 'domain', type: 'text'},
-        {text: 'Role', value: 'role', type: 'text'},
-        {text: 'Country', value: 'country', type: 'text'},
-        {text: 'City', value: 'city', type: 'text'},
-        {text: 'Company', value: 'company', type: 'text'},
-        {text: 'Sector', value: 'sector', type: 'text'},
-        {text: 'Added', value: 'created', type: 'date'},
-    ],
+      ],
+      filterFields: [
+          {text: 'First', value: 'first_name', type: 'text'},
+          {text: 'Last', value: 'last_name', type: 'text'},
+          {text: 'Emails', value: 'email', type: 'text'},
+          {text: 'Email Verified', value: 'email_verify', type: 'lookup'},
+          {text: 'Domain', value: 'domain', type: 'text'},
+          {text: 'Role', value: 'role', type: 'text'},
+          {text: 'Country', value: 'country', type: 'text'},
+          {text: 'City', value: 'city', type: 'text'},
+          {text: 'Company', value: 'company', type: 'text'},
+          {text: 'Sector', value: 'sector', type: 'text'},
+          {text: 'Added', value: 'created', type: 'date'},
+      ],
       pagination: {
           sortBy: 'last_name',
           rowsPerPage: -1,
@@ -499,6 +560,9 @@ export default {
           lookup: {is: {display: 'Is', function: this.filterByLookupIs},
                     isNot: {display: 'Is not', function: this.filterByLookupIsNot}}
       },
+      options: {
+      itemsPerPage: 100
+    }, 
       filterField: '',
       filterType: '',
       filterOperators: [],
@@ -517,71 +581,19 @@ export default {
       showBulkEmailDlg: false,
       selectedName: "",
       snackbar: false,
+      copy_list_snackbar: false,
       max25chars: v => v.length <= 25 || 'Input too long!',
+      max200chars: v => v.length <= 200 || 'Input too long!',
       actionItems:['Copy to list', 'Export', 'Delete'],
-      actionSubItems: ['All CEOs from UK', 'Highly targeted COOs from Switzerland'],
+      actionSubItems: ['All CEOs from UK', 'Highly targeted COOs from Switzerland', 'Item3', 'Item4', 'Item5', 'Item6', 'Item7', 'Item8', 'Item9', 'Item10', 'Item11' ],
       mainAction: '',
       actionSubmit: false,
       subAction:'',
       selectedItem: [],
       icons: { mdiDelete },
       id: window.location.pathname.split('/')[2], //this is the id from the browser
-      data: [
-        {
-          id:1,
-          linkedin_url: 'https://www.linkedin.com/in/martinknapic/',
-          company_url: 'https://www.linkedin.com/company/prospect-role/',
-          first_name: 'Martin',
-          last_name: 'Knapic',
-          email: 'knapic@gmail.com',
-          email_verify: true,
-          domain: 'prospectrole.com',
-          role: 'Product Manager',
-          country: 'Switzerland',
-          city: 'Lausanne',
-          company: 'Crystal Ltd',
-          sector: 'Information technology',
-          created: "2021-10-02T05:00:00.000Z",
-          avartar:
-            "https://ca.slack-edge.com/TN86UQ97H-US929HJSE-g28806d23364-512"
-        },
-        {
-          id:2,
-          linkedin_url: 'https://www.linkedin.com/in/martinknapic/',
-          company_url: 'https://www.linkedin.com/company/prospect-role/',
-          first_name: 'Munta',
-          last_name: 'Sirnahin',
-          email: 'muntasirnahin66@gmail.com',
-          email_verify: true,
-          domain: 'prospectrole.com',
-          role: 'Product Manager',
-          country: 'Switzerland',
-          city: 'Lausanne',
-          company: 'Crystal Ltd',
-          sector: 'Information technology',
-          created: "2021-01-02T05:00:00.000Z",
-          avartar:
-            "https://ca.slack-edge.com/TN86UQ97H-US929HJSE-g28806d23364-512"
-        },
-        {
-          id:3,
-          linkedin_url: 'https://www.linkedin.com/in/martinknapic/',
-          company_url: 'https://www.linkedin.com/company/prospect-role/',
-          first_name: 'Ashley',
-          last_name: 'Stewart',
-          email: '',
-          email_verify: false,
-          domain: '',
-          role: 'Product Manager',
-          country: 'Switzerland',
-          city: 'Lausanne',
-          company: 'Crystal Ltd',
-          sector: 'Information technology',
-          created: "2021-09-22T05:00:00.000Z",
-          avartar:
-            "https://ca.slack-edge.com/TN86UQ97H-US929HJSE-g28806d23364-512"
-        },
-      ]
+      tempOrgEmail: '',
+      data: json.data
     }
   },
   computed: {
@@ -690,6 +702,23 @@ export default {
     viewlink(item) {
       return 'detail-list/'+item.id;
     },
+    closeAlert() {
+      this.selectedName = "";
+      this.showAlert = false;
+    },
+    confirmDelete(item) {
+      this.showAlert = true;
+      this.selectedName = item;
+    },
+    handleDeleteDlg() {
+      this.showAlert = false;
+      this.selectedItem = [];
+    },
+    removeItem() {
+      const index = this.data.indexOf(this.selectedName);
+      this.data.splice(index, 1);
+      this.selectedName = null;
+    },
     handleBulkEmailDlg( flag ) {
       this.showBulkEmailDlg = flag;
     },
@@ -697,7 +726,28 @@ export default {
       this.actionSubmit = true;
       setTimeout(() => {
         this.actionSubmit = false;
+        console.log('this.mainAction', this.mainAction)
+        if( this.mainAction === 'Delete' )
+        {
+          this.confirmDelete('1');
+          console.log('selected 1', this.selectedItem)
+          
+          // const removedArr = this.data.filter(function(value) {
+            // console.log('selected 2', this.selectedItem)
+            // var filteredResult = this.selectedItem.filter((item) => {
+            //   return item.id !== value.id
+            // });
+            // return value;//filteredResult.length ? true : false;
+          // });
+          // this.filteredData = removedArr;
+          // this.selectedItem = [];
+        }
+        this.mainAction = '';
+        this.subAction = '';
       }, [2000]);
+    },
+    clearSeletedItem () {
+       this.selectedItem = [];
     },
     changeMainAction(obj){
       console.log('change action', obj)
@@ -705,9 +755,40 @@ export default {
     },
     changeSubAction(obj){
       this.subAction = obj;
+      if(this.mainAction === 'Copy to list'){
+        this.copy_list_snackbar = true
+      }
     },
     toggleOpen() {
-      this.$emit("changeOpen");
+      this.addNewRowData();
+      // this.$emit("changeOpen");
+      this.$emit("handleAddSnackBar", true);
+    },
+    addNewRowData() {
+      const dataLength = this.data.length;
+      const newRow = {
+        id: dataLength + 1,
+        linkedin_url: '',
+        company_url: '',
+        first_name: '',
+        last_name: '',
+        email: '',
+        email_verify: false,
+        domain: '',
+        role: '',
+        country: '',
+        city: '',
+        company: '',
+        sector: '',
+        created: moment().format("DD-MM-YYYY hh:mm A"),
+        avartar:
+          "https://ca.slack-edge.com/TN86UQ97H-US929HJSE-g28806d23364-512"
+      }
+      console.log('newRow', newRow)
+      this.data.splice(0, 0, newRow)
+      console.log('updated...', this.data)
+
+         
     },
     openSearchEmail(obj) {
       console.log('clicked ', obj)
@@ -748,7 +829,8 @@ export default {
     },
     // ---------- Events ------------------------
     onClearAllFilters () {
-        this.filterField = 'first_name'
+        this.filterField = 'first_name';
+        this.clearFilterTerms();
     },
     // ---------- field filter methods ----------
     filterByTextContains (list, fieldName, fieldValue) {
@@ -870,10 +952,26 @@ export default {
                 return true
             }
         })
+    },
+    openEmail (oldEmail) {
+      console.log(oldEmail);
+      this.tempOrgEmail = oldEmail;
+    },
+    saveEmail (newEmail, item) {
+      console.log(newEmail);
+      if(this.tempOrgEmail !== newEmail){
+        this.filteredData.map((row) => {
+          if(row.id === item.id){
+            row.email_verify = false;
+          }
+           return row;
+        })
+       
+      }
     }
   },
   components: {
-    // DeleteDialog: () => import("../DeleteDialog"),
+    DeleteDialog: () => import("../DeleteDialog"),
     EmailSearchDlg: () => import("../EmailSearchDlg"),
     BulkEmailSearch: () => import("../BulkEmailSearch")
   },

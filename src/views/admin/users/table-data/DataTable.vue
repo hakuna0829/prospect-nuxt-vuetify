@@ -6,9 +6,9 @@
     <div class="">
       <v-card>
         <v-row align="center">
-          <v-col class="grow">Users</v-col>
+          <v-col class="grow"></v-col>
           <v-col class="shrink">
-            <v-btn color="primary" to="/new-user">Add User</v-btn>
+            <v-btn color="primary" to="/admin/new-user">Add User</v-btn>
           </v-col>
         </v-row>
 
@@ -131,8 +131,9 @@
           class="border"
           show-select
           v-model="selectedRows"
+           :options="options"
           :footer-props="{
-            'items-per-page-options': [10, 50, 200, -1]
+            'items-per-page-options': [10, 50, 100, -1]
           }"
         >
         
@@ -170,10 +171,19 @@
           v-model="snackbar"
           top
           right
-          color="success"
-          style="padding-top:125px"
+          color="black"
+          style="padding-top:80px"
         >
           The user has been successfully deleted
+        </v-snackbar>
+        <v-snackbar
+          v-model="action_snackbar"
+          top
+          right
+          color="black"
+          style="padding-top:80px"
+        >
+          {{actionNotification}}
         </v-snackbar>
       </v-card>
     </div>
@@ -183,6 +193,7 @@
 <script>
 import { mdiDelete } from "@mdi/js";
 import moment from 'moment';
+import json from "./users_data.json";
 
 export default {
   name: "DataTable",
@@ -190,9 +201,13 @@ export default {
   data () {
     return {
     showAlert: false,
+    options: {
+      itemsPerPage: 100
+    }, 
     selectedName: "",
     selectedRows: [],
     snackbar: false,
+    action_snackbar: false,
     actionItems:['Change plan', 'Add credits', 'Delete user'],
     actionSubItems: ['Free Trial', 'Lite', 'Pro', 'Enterprise', 'Freeze'],
     mainAction: '',
@@ -248,30 +263,8 @@ export default {
     filterLookupValue: '',
     filterLookupLabel: '',
     icons: { mdiDelete },
-    data: [
-      {
-        id:1,
-        avartar:
-          "https://ca.slack-edge.com/TGUK83BPA-U01KTG7MK34-g19920895070-512",
-        firstName: "Martin",
-        lastName: "Knapic",
-        email: "knapicm@gmail.com",
-        type: "Administrator",
-        access: 123,
-        credits_used: 300
-      },
-      {
-        id:2,
-        avartar:
-          "https://ca.slack-edge.com/TN86UQ97H-US929HJSE-g28806d23364-512",
-        firstName: "Visitor",
-        lastName: "101",
-        email: "visitorRandomeCreated101@gmail.com",
-        type: "Viewer",
-        access: 100,
-        credits_used: 200
-      }
-    ]
+    actionNotification: '',
+    data: json.data
   }},
   computed: {
     filteredData () {
@@ -379,6 +372,8 @@ export default {
       const index = this.data.indexOf(this.selectedName);
       this.data.splice(index, 1);
       this.selectedName = null;
+      this.selectedRows = [];
+      this.action_snackbar = true;
     },
     handleDeleteDlg() {
       this.showAlert = false;
@@ -390,6 +385,21 @@ export default {
       this.actionSubmit = true;
       setTimeout(() => {
         this.actionSubmit = false;
+        if(this.mainAction === 'Change plan'){
+          this.actionNotification = 'Changes successfully updated.';
+          this.action_snackbar = true;
+        }
+        if(this.mainAction === 'Add credits'){
+          this.actionNotification = 'The credits have been added to selected users.';
+          this.action_snackbar = true;
+        }
+        if(this.mainAction === 'Delete user'){
+           
+          this.confirmDelete('1');
+          this.actionNotification = 'Selected users have been deleted successfully.';
+        }
+        
+        
       }, [2000]);
     },
     changeMainAction(obj){
@@ -425,7 +435,8 @@ export default {
     },
     // ---------- Events ------------------------
     onClearAllFilters () {
-        this.filterField = 'firstName'
+        this.filterField = 'firstName';
+        this.clearFilterTerms();
     },
     // ---------- field filter methods ----------
     filterByTextContains (list, fieldName, fieldValue) {
@@ -581,7 +592,7 @@ export default {
 
 .email {
   margin: 0px;
-  max-width: 100px;
+  max-width: 180px;
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;

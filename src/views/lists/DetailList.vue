@@ -1,12 +1,17 @@
 <template>
   <v-container fluid class="down-top-padding" id="verify">
+    <BaseBreadcrumb
+      :title="page.title"
+      :icon="page.icon"
+      :breadcrumbs="breadcrumbs"
+    ></BaseBreadcrumb>
     <v-row>
       <v-col cols="12" md="4">
        
       </v-col>
       <v-col cols="12" sm="12">
         <BaseCard>
-          <DataTable @changeOpen="handleNewDlg($event)"></DataTable>
+          <DataTable @changeOpen="handleNewDlg($event)" @handleAddSnackBar="handleSnackBar($event)"></DataTable>
         </BaseCard>
       </v-col>
       <v-col cols="12" sm="12" lg="6">
@@ -20,8 +25,8 @@
         <!-- </BaseCard> -->
       </v-col>
     </v-row>
-    <v-snackbar v-model="snackbar" absolute top right color="success">
-      New List Item has been successfully created
+    <v-snackbar v-model="snackbar" absolute top right color="black">
+      A new row had been added. Click in the cell to start adding data.
     </v-snackbar>
   </v-container>
 </template>
@@ -35,13 +40,20 @@ export default {
     newDlg: false,
     snackbar: false,
     page: {
-      title: "LISTS"
+      title: "All Extension Prospects"
     },
     breadcrumbs: [
       {
         text: "LISTS",
         disabled: false,
-        to: "/lists"
+        to: "/lists",
+        
+      },
+      {
+        text: "All Extension Prospects",
+        disabled: true,
+        to: "",
+        
       }
     ]
   }),
@@ -50,6 +62,7 @@ export default {
       this.newDlg = !this.newDlg;
     },
     handleSnackBar(val) {
+      console.log('handle add snackbar', val)
       this.snackbar = val;
     }
   },

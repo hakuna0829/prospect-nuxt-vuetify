@@ -114,6 +114,11 @@ const router = new Router({
           component: () => import("@/views/admin/company")
         },
         {
+          name: "Admin new user",
+          path: "new-user",
+          component: () => import("@/views/admin/users/new-user")
+        },
+        {
           name: "Admin new company",
           path: "new-company",
           component: () => import("@/views/admin/company/new-company")

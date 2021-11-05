@@ -37,18 +37,18 @@
           value="admin"
           class="mb-0 success-text"
         ></v-radio>
-        <p class="ml-8 text-body-2">
+        <!-- <p class="ml-8 text-body-2">
           Admin has full access and can perform all actions in the account.
-        </p>
+        </p> -->
         <v-radio
           label="Manager"
           color="green darken-1"
           value="manager"
           class="mb-0 success-text"
         ></v-radio>
-        <p class="ml-8 text-body-2">
+        <!-- <p class="ml-8 text-body-2">
           Manager has full access but can’t and access billing.
-        </p>
+        </p> -->
 
         <v-radio
           label="User"
@@ -56,10 +56,10 @@
           value="user"
           class="mb-0 success-text"
         ></v-radio>
-        <p class="ml-8 text-body-2">
+        <!-- <p class="ml-8 text-body-2">
           User can access full platform but can't set new API keys, add new
           users or see billing section.
-        </p>
+        </p> -->
       </v-radio-group>
       <div class="d-flex align-baseline">
         <v-btn

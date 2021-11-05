@@ -20,14 +20,15 @@
                 <v-col cols="12" md="5" class="py-0">
                   <div class="d-flex">
                       <v-text-field
-                        v-model="data.first_name"
+                        :value="data.first_name"
                         label="First"
                         :rules="min3chars"
+                        @change="handleChange"
                         required
                         single-line
                       ></v-text-field>&ensp;
                       <v-text-field
-                        v-model="data.last_name"
+                        :value="data.last_name"
                         label="Last"
                         :rules="min3chars"
                         required
@@ -38,14 +39,18 @@
                 <v-col cols="12" md="7" class="py-0">
                   <div class="d-flex align-center">
                     <v-text-field
-                        v-model="data.domain"
+                        :value="data.email"
                         label="Enter company domain"
-                        :rules="domainRules"
+                        :rules="emailRules"
                         single-line
                         required
                         class="me-3"
                       ></v-text-field> 
-                      <v-btn class="primary" @click="toggleOpen" :disabled="!emailList.length || !searching">save</v-btn>
+                      <v-btn class="primary" @click="toggleOpen" 
+                      >save</v-btn>
+                      <!-- <v-btn class="primary" @click="toggleOpen" 
+                      :disabled="!emailList.length || !searching"
+                      >save</v-btn> -->
                   </div>
                 </v-col>
                 <v-col cols="12" class="text-right pt-0">
@@ -102,6 +107,9 @@ export default {
       v => !!v || 'Domain is required',
       v => /^[a-zA-Z0-9][a-zA-Z0-9-]{1,61}[a-zA-Z0-9]\.[a-zA-Z]{2,}$/.test(v) || 'Domain must be valid',
     ],
+    emailRules: [ 
+        v => !v || /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(v) || 'E-mail must be valid'
+    ],
     searching: false,
     emailList: [
       {email:'mianaami1@gmail.com', available: false, count:0},
@@ -124,7 +132,9 @@ export default {
       console.log('testValid', testValid);
       if(testValid)  this.searching = true;
     },
-    
+    handleChange(seleted) {
+      console.log("seletedmain", seleted);
+    },
     submit() {
       this.$emit("changeOpen");
       this.$emit("removeItem");

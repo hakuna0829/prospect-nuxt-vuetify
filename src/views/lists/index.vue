@@ -24,7 +24,7 @@
     <v-row>
       <v-col cols="12" sm="12">
         <BaseCard>
-          <DataTable @changeOpen="handleNewDlg($event)"></DataTable>
+          <DataTable @changeOpen="handleNewDlg($event)" :added="snackbar"></DataTable>
         </BaseCard>
       </v-col>
       <v-col cols="12" sm="12" lg="6">
@@ -38,7 +38,7 @@
         <!-- </BaseCard> -->
       </v-col>
     </v-row>
-    <v-snackbar v-model="snackbar" absolute top right color="success">
+    <v-snackbar v-model="snackbar" absolute top right color="black">
       New List Item has been successfully created
     </v-snackbar>
   </v-container>

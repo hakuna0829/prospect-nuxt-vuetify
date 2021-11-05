@@ -10,7 +10,7 @@
     >
       Please upload csv file...
     </v-snackbar>
-    <v-snackbar v-model="snackbar" top right color="success">
+    <v-snackbar v-model="snackbar" top right color="black">
       Email has been successfully verified.
     </v-snackbar>
     <div class="pa-4">

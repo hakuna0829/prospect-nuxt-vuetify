@@ -5,6 +5,13 @@
         <v-toolbar dense flat class="transparent pa-0" height="40px">
           <v-toolbar-title class="pt-3">
             <span class="text--primary">{{ title }}</span>
+             <v-chip
+                class="ma-2 white--text text-sm"
+                small
+                color="#6D9DFF"
+              >
+                STATIC LIST
+              </v-chip>
           </v-toolbar-title>
           <v-toolbar-title
             class="toobar-extension transparent pb-3"
@@ -35,11 +42,14 @@ export default {
   data: () => ({})
 };
 </script>
-<style lang="scss">
+<style lang="scss" scope>
 .page-breadcrumb {
   margin: -24px -25px 27px -25px;
 }
 
+.v-breadcrumbs__item{
+  color:rgba(0, 0, 0, 0.8) !important;
+}
 .custom-shaodow {
   box-shadow: none !important;
 }

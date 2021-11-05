@@ -30,7 +30,8 @@ export default {
         text: "Companies",
         disabled: false,
         to: "/admin/company"
-      }
+      },
+      
     ]
   }),
   methods: {

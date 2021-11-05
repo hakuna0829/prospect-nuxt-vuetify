@@ -36,8 +36,8 @@
       v-model="snackbar_success"
       top
       right
-      color="success"
-      style=" padding-top:125px;"
+      color="black"
+      style=" padding-top:80px;"
     >
       The information was successfully saved.
     </v-snackbar>
@@ -46,7 +46,7 @@
       top
       right
       color="error"
-      style=" padding-top:125px"
+      style=" padding-top:80px"
     >
       The server is not responding. Try again later.
     </v-snackbar>

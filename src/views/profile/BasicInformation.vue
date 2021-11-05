@@ -46,7 +46,7 @@
         @click:append="show1 = !show1"
       ></v-text-field>
       <div class="d-flex align-baseline">
-        <v-btn class="text-capitalize mt-5 element-0" color="success"
+        <v-btn class="text-capitalize mt-5 element-0" color="success" @click="toggleOpen(true)"
           >Save</v-btn
         >&nbsp; or &nbsp;
         <a
@@ -74,6 +74,12 @@ export default {
       min: v => v.length >= 8 || "Min 8 characters",
       emailMatch: () => "The email and password you entered don't match"
     }
-  })
+  }),
+  methods: {
+    toggleOpen() {
+      console.log('sssss')
+      this.$emit("handleSnackBar", true);
+    },
+  }
 };
 </script>

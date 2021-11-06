@@ -20,16 +20,17 @@
                 <v-col cols="12" md="5" class="py-0">
                   <div class="d-flex">
                       <v-text-field
-                        :value="data.first_name"
+                        v-model="clonedlData.first_name"
                         label="First"
                         :rules="min3chars"
-                        @change="handleChange"
+                        @input="handleChange"
                         required
                         single-line
                       ></v-text-field>&ensp;
                       <v-text-field
-                        :value="data.last_name"
+                        v-model="clonedlData.last_name"
                         label="Last"
+                        @input="handleChange"
                         :rules="min3chars"
                         required
                         single-line
@@ -39,18 +40,16 @@
                 <v-col cols="12" md="7" class="py-0">
                   <div class="d-flex align-center">
                     <v-text-field
-                        :value="data.email"
+                        v-model="clonedlData.email"
+                        @input="handleChange"
                         label="Enter company domain"
                         :rules="emailRules"
                         single-line
                         required
                         class="me-3"
                       ></v-text-field> 
-                      <v-btn class="primary" @click="toggleOpen" 
+                      <v-btn class="primary" @click="toggleOpen" :disabled="!isChanged"
                       >save</v-btn>
-                      <!-- <v-btn class="primary" @click="toggleOpen" 
-                      :disabled="!emailList.length || !searching"
-                      >save</v-btn> -->
                   </div>
                 </v-col>
                 <v-col cols="12" class="text-right pt-0">
@@ -94,14 +93,16 @@
 <script>
 export default {
   name: "EmailSearchDlg",
-  props: ["open", "data"],
+  props: {open: Boolean, item: Object},
 
-  data: () => ({
+  data() {
+    return {
     valid: true,
-    
+    isChanged: false,
+    clonedlData: {first_name: '', last_name: '', email: ''},
     min3chars: [
       v => !!v || 'Input is required',
-      v => v.length >= 3 || 'Input must be longer than 3 characters'
+      v => v.length >= 2 || 'Input must be longer than 2 characters'
     ],
     domainRules: [
       v => !!v || 'Domain is required',
@@ -116,7 +117,18 @@ export default {
       {email:'mianaami2@gmail.com', available: false, count:0},
       {email:'miAnaamiadiad@gmail.com', available: true, count:3}
     ]
-  }),
+  }},
+   watch: { 
+    open: function(newVal, oldVal) { // watch it
+      console.log('Prop changed: ', newVal, ' | was: ', oldVal)
+      if(newVal){
+        this.clonedlData.first_name = this.item.first_name;
+        this.clonedlData.last_name = this.item.last_name;
+        this.clonedlData.email = this.item.email;
+        console.log(this.clonedlData)
+      }
+    },
+  },
   computed:{
     dialog() {
       return this.open
@@ -128,14 +140,22 @@ export default {
       this.$emit("changeOpen");
     },
     searchEmail() {
+      console.log('data', this.item);
+      console.log('ddd', this.clonedlData)
       const testValid = this.$refs.form.validate();
       console.log('testValid', testValid);
       if(testValid)  this.searching = true;
     },
-    handleChange(seleted) {
-      console.log("seletedmain", seleted);
+    handleChange() {
+      console.log("clonedlData", this.clonedlData);
+      if(this.clonedlData.first_name !== this.item.first_name || 
+        this.clonedlData.last_name !== this.item.last_name || 
+        this.clonedlData.email !== this.item.email) {
+        this.isChanged = true;
+      }
     },
     submit() {
+      this.isChanged = false;
       this.$emit("changeOpen");
       this.$emit("removeItem");
       this.$emit("handleSnackBar", true);

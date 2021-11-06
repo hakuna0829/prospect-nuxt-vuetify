@@ -460,7 +460,8 @@
         <EmailSearchDlg 
           :open="showEmailSearch"
           @changeOpen="handleEmailSearchDlg($event)"
-          :data="selectedItem"
+          :item="selectedEmailObj"
+          @handleItem="handleSeletedObj"
         />
         <BulkEmailSearch :open="showBulkEmailDlg" @changeOpen="closeBulkEmailSearchDlg($event)" />
         <v-snackbar
@@ -590,6 +591,7 @@ export default {
       actionSubmit: false,
       subAction:'',
       selectedItem: [],
+      selectedEmailObj: {},
       icons: { mdiDelete },
       id: window.location.pathname.split('/')[2], //this is the id from the browser
       tempOrgEmail: '',
@@ -792,7 +794,7 @@ export default {
     },
     openSearchEmail(obj) {
       console.log('clicked ', obj)
-      this.selectedItem = obj;
+      this.selectedEmailObj = obj;
       this.showEmailSearch = true;
     },
     handleSnackBar(val) {
@@ -800,6 +802,9 @@ export default {
     },
     handleEmailSearchDlg() {
       this.showEmailSearch = false;
+    },
+    handleSeletedObj(obj) {
+      console.log('updated obj', obj);
     },
     closeBulkEmailSearchDlg() {
       this.showBulkEmailDlg = false;

@@ -4,18 +4,18 @@
   <!-- ----------------------------------------------------------------------------- -->
   <div>
     <div class="">
-      <v-card>
-        <v-row align="center">
+      <v-card style="box-shadow:none">
+        <!-- <v-row align="center">
           <v-col class="grow">
             
           </v-col>
           <v-col class="shrink">
             <v-btn color="primary" @click="toggleOpen()">ADD PROSPECT</v-btn>
           </v-col>
-        </v-row>
+        </v-row> -->
         <v-row>
           
-            <v-col cols="12" xl="4">
+            <v-col cols="12" md="8" xl="4" class="py-2 py-md-0" order-md="1">
               <v-menu>
                 <template v-slot:activator="{ on, attrs }">
                   <v-btn
@@ -51,7 +51,7 @@
                 </v-list>
               </v-menu>
               <v-btn
-                v-if="mainAction !== '' && mainAction !== 'Copy to list' "
+                v-if="mainAction !== '' "
                 class="rounded-lg primary mt-2"
                 @click="handleActionSubmit"
               >
@@ -64,8 +64,8 @@
                 v-if="actionSubmit"
               ></v-progress-circular>
             </v-col>
-            <v-col cols="12" sm="12" lg="10" xl="7" class=" py-0">
-              <div class="d-flex">
+            <v-col cols="12" sm="12" md="9" xl="6" class=" py-0" order-md="3">
+              <div class="d-sm-flex">
                 <v-btn light class="mr-2 align-self-center mb-2 yellow-btn white--text" color="#F1C40F" @click="handleBulkEmailDlg(true)">
                   <span>Bulk email search</span>
                 </v-btn>
@@ -77,7 +77,7 @@
                   v-model="filterField"
                   label="Filter by"
                   :full-width="false"
-                  class="me-1 me-md-2"
+                  class="me-1 me-md-2 input-custom"
                 >
                    <!-- <template v-slot:item="{ item, attrs, on }">
                     <v-list-item
@@ -96,7 +96,7 @@
                   v-model="filterOperator"
                   label="Operator"
                   :full-width="false"
-                  class="me-1 me-md-2"
+                  class="me-1 me-md-2 input-custom"
                 >
                    <!-- <template v-slot:item="{ item, attrs, on }">
                     <v-list-item
@@ -119,7 +119,8 @@
                   return-masked-value
                   v-model="filterTerm"
                   hide-details="auto"
-                  class="me-1 me-md-2"
+                  class="me-1 me-md-2 input-custom"
+                  style="max-width:150px"
                 ></v-text-field>
                 
                 <v-text-field
@@ -137,17 +138,21 @@
                   :items="filterLookupItems"
                   :label="filterLookupLabel"
                   v-model="filterLookupValue"
+                  class="input-custom"
                 ></v-autocomplete>
                 
               </div>
             </v-col>
-            <v-col sm="12" lg="2" xl="1" class="pt-0">
+            <v-col cols="6" md="3" xl="1" class="pt-0 d-flex justify-end" order-md="4">
               <!-- <v-btn light class="mr-2 align-self-center mt-2 yellow-btn white--text" color="#F1C40F" >
                 <span>SEARCH</span>
               </v-btn> -->
               <v-btn light class="mr-2 align-self-center mt-2 yellow-btn white--text" color="#F1C40F" @click="onClearAllFilters">
                 <span>CLEAR ALL</span>
               </v-btn>
+            </v-col>
+            <v-col cols="6" md="4" xl="1" class="pt-0 d-flex justify-end"  order-md="2" order-xl="4">
+               <v-btn color="primary align-self-center mt-2" @click="toggleOpen()">ADD PROSPECT</v-btn>
             </v-col>
          </v-row>
          
@@ -160,7 +165,7 @@
           v-model="selectedItem" 
           :options="options"
           :footer-props="{
-            'items-per-page-options': [10, 50, 100, -1]
+            'items-per-page-options': [10, 25, 50, 100, -1]
           }"
         >
           <!-- <template v-slot:item.data-table-select="{ on, props }">
@@ -168,8 +173,13 @@
           </template> -->
           <template v-slot:item.id="{ item }">
             <div  class="d-flex align-center">
-              <a :href="item.linkedin_url"
+              <a v-if="item.linkedin_url" :href="item.linkedin_url"
                 class="profile_link mx-3"
+                target="_blank">
+                <v-icon color="#0097d3">mdi-linkedin</v-icon>
+              </a>
+              <a v-else
+                class="profile_link mx-3 disabled"
                 target="_blank">
                 <v-icon color="#0097d3">mdi-linkedin</v-icon>
               </a>
@@ -182,8 +192,8 @@
                 transition="scale-transition"
               >
                 <template v-slot:activator="{ on }">
-                  <v-btn icon v-on="on" class="mr-1 align-self-center">
-                    <v-icon>mdi-dots-horizontal</v-icon>
+                  <v-btn icon v-on="on" class="mr-1 align-self-center" width="16px">
+                    <v-icon>mdi-dots-vertical</v-icon>
                   
                   </v-btn>
                 </template>
@@ -277,12 +287,69 @@
                 ></v-text-field>
               </template>
             </v-edit-dialog> -->
-            <div @click="openSearchEmail(item)">{{ item.email }}</div>
-            <v-btn v-if="!item.email" class="missingBtn"  @click="openSearchEmail(item)" color="#FFF4D4"><span>Find Email</span></v-btn>
+            <div  class="d-flex align-center">
+              <v-menu
+                  bottom
+                  left
+                  offset-y
+                  origin="top right"
+                  transition="scale-transition"
+                >
+                <template v-slot:activator="{ on }">
+                  <v-btn icon v-on="on" class="mr-1 align-self-center" width="16px">
+                    <v-icon>mdi-dots-vertical</v-icon>
+                  </v-btn>
+                </template>
+                  <v-list>
+                    <v-list-item
+                      
+                    >
+                      <v-list-item-title>
+                        <v-edit-dialog
+                          width="unset"
+                          large
+                          @save="saveEmail(item)"
+                          @open="editEmail = item.email"
+                        >
+                          Edit Email
+                          <template v-slot:input>
+                            <v-text-field
+                              v-model="editEmail"
+                              label="Edit"
+                              single-line
+                              counter
+                            ></v-text-field>
+                          </template>
+                        </v-edit-dialog>
+                        
+                      </v-list-item-title>
+                    </v-list-item>
+                    <v-list-item>
+                      <v-list-item-title>
+                        <a :href="item.company_url"
+                          class="profile_link mx-3"
+                          target="_blank">
+                          Find Email
+                        </a>
+                      </v-list-item-title>
+                    </v-list-item>
+                  </v-list>
+                </v-menu> 
+              <div @click="openSearchEmail(item)" style="cursor: pointer">{{ item.email }}</div>
+              <v-btn v-if="!item.email" class="missingBtn"  @click="openSearchEmail(item)" color="#FFF4D4"><span>Find Email</span></v-btn>
+            </div>
           </template>
           <template v-slot:item.email_verify="{ item }">
-           <div v-if="item.email_verify">Yes</div>
-           <v-btn v-else class="missingBtn" color="#FFF4D4"><span>Verify</span></v-btn>
+           <div v-if="item.email_verify === 1 "><span style="border-radius:50%; background:green; padding: 0 8px;">&nbsp;</span></div>
+           <div v-if="item.email_verify === 2 "><span style="border-radius:50%; background:#f1c40f; padding: 0 8px;">&nbsp;</span></div>
+           <div v-if="item.email_verify === 3 "><span style="border-radius:50%; background:red; padding: 0 8px;">&nbsp;</span></div>
+           <div v-if="item.email_verify === -1 ">
+             <v-btn class="missingBtn" color="#FFF4D4" loading><span>Verify</span></v-btn>
+           </div>
+           <div v-else-if="item.email_verify === 0 ">
+             <v-btn class="missingBtn" color="#FFF4D4" @click="handleVerify(item)" ><span>Verify</span></v-btn>
+           </div>
+           
           </template>
 
           <template v-slot:item.domain="{ item }">
@@ -359,11 +426,17 @@
 
           <template v-slot:item.company="{ item }">
             <div  class="d-flex align-center">
-              <a :href="item.company_url"
+              <a v-if="item.company_url" :href="item.company_url"
                 class="profile_link mx-3"
                 target="_blank">
                 <v-icon color="#0097d3">mdi-linkedin</v-icon>
               </a>
+              <a v-else
+                class="profile_link mx-3 disabled"
+                target="_blank">
+                <v-icon color="#0097d3">mdi-linkedin</v-icon>
+              </a>
+              
               <v-menu
                 bottom
                 left
@@ -372,7 +445,7 @@
                 transition="scale-transition"
               >
                 <template v-slot:activator="{ on }">
-                  <v-btn icon v-on="on" class="mr-1 align-self-center">
+                  <v-btn icon v-on="on" class="mr-1 align-self-center" width="16px">
                     <v-icon>mdi-dots-vertical</v-icon>
                   </v-btn>
                 </template>
@@ -484,16 +557,18 @@
           Records copied to the selected list.
           <template v-slot:action="{ attrs }">
             <v-btn
-              color="indigo"
+              color="yellow"
               text
+              style="font-weight: 700"
               v-bind="attrs"
               @click="copy_list_snackbar = false"
             >
               Open List
             </v-btn>
             <v-btn
-              color="indigo"
+              color="white"
               text
+              style="font-weight: 700"
               v-bind="attrs"
               @click="copy_list_snackbar = false"
             >
@@ -517,7 +592,7 @@ export default {
   data () {
     return {
       headers: [
-      { text: "ID", value: "id", filterable: false, sortable: false },
+      { text: "Person ID", value: "id", filterable: false, sortable: false },
       { text: "First", value: "first_name", filterable: false },
       { text: "Last", value: "last_name", filterable: false },
       { text: "Emails", value: "email", filterable: false },
@@ -562,7 +637,7 @@ export default {
                     isNot: {display: 'Is not', function: this.filterByLookupIsNot}}
       },
       options: {
-      itemsPerPage: 100
+      itemsPerPage: 25
     }, 
       filterField: '',
       filterType: '',
@@ -595,6 +670,7 @@ export default {
       icons: { mdiDelete },
       id: window.location.pathname.split('/')[2], //this is the id from the browser
       tempOrgEmail: '',
+      editEmail: '',
       data: json.data
     }
   },
@@ -681,7 +757,7 @@ export default {
       } else if (this.filterType === 'lookup') {
         let lookupItems = []
         if (this.filterField === 'email_verify') {
-            lookupItems = ['Yes', 'No']
+            lookupItems = ['Safe to send', 'Valid', 'Invalid']
             this.filterLookupLabel = 'Email Verify'
         }
         this.filterLookupItems = lookupItems
@@ -700,6 +776,54 @@ export default {
   methods: {
     contributors (items) {
       return items.map((item, i) => {return <p key={i}>{item}</p>})
+    },
+    saveEmail(update) {
+      console.log(update, this.editEmail);
+      this.filteredData.map(item => {
+        if(item.id === update.id){
+          item.email = this.editEmail;
+          item.email_verify = 0;
+          return item;
+        }
+      })
+    },
+    // openEmail (oldEmail) {
+    //   console.log(oldEmail);
+    //   this.tempOrgEmail = oldEmail;
+    // },
+    // saveEmail (newEmail, item) {
+    //   console.log(newEmail);
+    //   if(this.tempOrgEmail !== newEmail){
+    //     this.filteredData.map((row) => {
+    //       if(row.id === item.id){
+    //         row.email_verify = false;
+    //       }
+    //        return row;
+    //     })
+       
+    //   }
+    // }
+    handleVerify (current) {
+      this.filteredData.map((item) => {
+        if(item.id === current.id){
+          item.email_verify = -1;
+          console.log(item)
+        }
+        return item
+      });
+      
+      setTimeout(() => {
+        this.filteredData.map((item) => {
+          if(item.id === current.id){
+            item.email_verify = this.randomIntFromInterval(1,3);
+          }
+          return item
+        })
+      }, 2000)
+
+    },
+    randomIntFromInterval(min, max) { // min and max included 
+      return Math.floor(Math.random() * (max - min + 1) + min)
     },
     viewlink(item) {
       return 'detail-list/'+item.id;
@@ -729,6 +853,9 @@ export default {
       setTimeout(() => {
         this.actionSubmit = false;
         console.log('this.mainAction', this.mainAction)
+        if(this.mainAction === 'Copy to list'){
+          this.copy_list_snackbar = true
+        }
         if( this.mainAction === 'Delete' )
         {
           this.confirmDelete('1');
@@ -757,9 +884,6 @@ export default {
     },
     changeSubAction(obj){
       this.subAction = obj;
-      if(this.mainAction === 'Copy to list'){
-        this.copy_list_snackbar = true
-      }
     },
     toggleOpen() {
       this.addNewRowData();
@@ -939,8 +1063,8 @@ export default {
         })
     },
     filterByLookupIs (list, fieldName, fieldValue) {
-      console.log(list, fieldName, fieldValue)
-        const compareValue = fieldValue === 'Yes' ? true : false;
+      console.log(list, fieldName, fieldValue)//'Safe to send', 'Valid', 'Invalid'
+        const compareValue = fieldValue === 'Safe to send' ? 1 : fieldValue === 'Valid' ? 2 : 3;
         return list.filter(item => {
             if(item[fieldName] !== undefined) {
                 return item[fieldName] === compareValue 
@@ -950,30 +1074,16 @@ export default {
         })
     },
     filterByLookupIsNot (list, fieldName, fieldValue) {
+      const compareValue = fieldValue === 'Safe to send' ? 1 : fieldValue === 'Valid' ? 2 : 3;
         return list.filter(item => {
             if(item[fieldName] !== undefined) {
-                return item[fieldName] !== fieldValue
+                return item[fieldName] !== compareValue
             } else {
                 return true
             }
         })
     },
-    openEmail (oldEmail) {
-      console.log(oldEmail);
-      this.tempOrgEmail = oldEmail;
-    },
-    saveEmail (newEmail, item) {
-      console.log(newEmail);
-      if(this.tempOrgEmail !== newEmail){
-        this.filteredData.map((row) => {
-          if(row.id === item.id){
-            row.email_verify = false;
-          }
-           return row;
-        })
-       
-      }
-    }
+    
   },
   components: {
     DeleteDialog: () => import("../DeleteDialog"),
@@ -990,6 +1100,10 @@ export default {
 // @import './overrides.sass';
 
 $edit-dialog-content-padding: 0 8px;
+
+.input-custom {
+  max-width: 150px;
+}
 
 @media #{map-get($display-breakpoints, 'md-and-down')} {
   .custom-class {
@@ -1072,6 +1186,11 @@ $edit-dialog-content-padding: 0 8px;
 .profile_link {
   color: #000000DE;
   margin: 0px !important;
+}
+.profile_link.disabled {
+  color: #000000DE;
+  opacity: 0.5;
+  cursor: auto;
 }
 </style>
 <style>

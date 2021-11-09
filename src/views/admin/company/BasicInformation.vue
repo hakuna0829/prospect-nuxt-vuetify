@@ -1,5 +1,5 @@
 <template>
-  <v-card class="mb-7">
+  <v-card class="mb-7" style="box-shadow:none">
     <v-card-text class="pa-5">
       <h3 class="title font-weight-regular">
         Organization Information

@@ -88,8 +88,8 @@
         <template v-if="loginStatus">
           
           <v-tabs align-with-title light color="#000" class="topMenu">
-            <v-tab style="height: 100%;" >
-              <router-link to="/lists" class="black--text">
+            <v-tab style="height: 100%; padding:0px" >
+              <router-link to="/lists" class="black--text" style="padding: 21px 24px;">
                 LISTS
               </router-link>
             </v-tab>

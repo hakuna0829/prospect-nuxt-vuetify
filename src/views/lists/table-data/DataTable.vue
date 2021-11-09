@@ -18,7 +18,7 @@
           class="border"
           :custom-sort="customSort"
           :footer-props="{
-            'items-per-page-options': [10, 50, 100, -1]
+            'items-per-page-options': [10, 25, 50, 100, -1]
           }"
           :options="options"
         >
@@ -122,7 +122,7 @@ export default {
     selectedName: "",
     snackbar: false,
     options: {
-      itemsPerPage: 100
+      itemsPerPage: 25
     }, 
     headers: [
       { text: "", value: "label", filterable: false, sortable: false },

@@ -4,7 +4,7 @@
   <!-- ----------------------------------------------------------------------------- -->
   <div>
     <div class="">
-      <v-card>
+      <v-card style="box-shadow:none">
         <v-row align="center">
           <v-col class="grow"></v-col>
           <v-col class="shrink">
@@ -17,8 +17,9 @@
           item-key="createdDate"
           class="border"
           :footer-props="{
-            'items-per-page-options': [10, 50, 200, -1]
+            'items-per-page-options': [10, 25, 50, 200, -1]
           }"
+          :options="options"
         >
           <template v-slot:item.avartar="{ item }">
             <img :src="item.avartar" alt="" width="30px" />
@@ -72,6 +73,9 @@ export default {
   data: () => ({
     showAlert: false,
     selectedName: "",
+    options: {
+      itemsPerPage: 25
+    }, 
     snackbar: false,
     headers: [
       { text: "", value: "avartar", filterable: false },

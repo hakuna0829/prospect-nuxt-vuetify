@@ -4,7 +4,7 @@
   <!-- ----------------------------------------------------------------------------- -->
   <div>
     <div class="">
-      <v-card>
+      <v-card style="box-shadow:none">
         <v-row align="center">
           <v-col class="grow"></v-col>
           <v-col class="shrink">
@@ -133,7 +133,7 @@
           v-model="selectedRows"
            :options="options"
           :footer-props="{
-            'items-per-page-options': [10, 50, 100, -1]
+            'items-per-page-options': [10, 25, 50, 100, -1]
           }"
         >
         
@@ -202,7 +202,7 @@ export default {
     return {
     showAlert: false,
     options: {
-      itemsPerPage: 100
+      itemsPerPage: 25
     }, 
     selectedName: "",
     selectedRows: [],

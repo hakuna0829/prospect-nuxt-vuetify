@@ -326,11 +326,7 @@
                     </v-list-item>
                     <v-list-item>
                       <v-list-item-title>
-                        <a :href="item.company_url"
-                          class="profile_link mx-3"
-                          target="_blank">
-                          Find Email
-                        </a>
+                        <div @click="openSearchEmail(item)" style="cursor: pointer">Find Email</div>
                       </v-list-item-title>
                     </v-list-item>
                   </v-list>

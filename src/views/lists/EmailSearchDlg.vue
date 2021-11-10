@@ -4,7 +4,7 @@
   <!-- ----------------------------------------------------------------------------- -->
   <div>
     <div class="mt-4 text-center" >
-      <v-dialog v-model="open" persistent max-width="900px" >
+      <v-dialog v-model="open" persistent max-width="900px" @keydown.esc="toggleOpen">
         <v-card>
           <v-card-title class="d-flex justify-space-between">
             <span class="headline">Find Email</span>

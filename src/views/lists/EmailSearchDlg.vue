@@ -19,20 +19,17 @@
               <v-row>
                 <v-col cols="12" md="5" class="py-0">
                   <div class="d-flex">
+                    <!-- :rules="min3chars" -->
                       <v-text-field
                         v-model="clonedlData.first_name"
                         label="First"
-                        :rules="min3chars"
                         @input="handleChange"
-                        required
                         single-line
                       ></v-text-field>&ensp;
                       <v-text-field
                         v-model="clonedlData.last_name"
                         label="Last"
                         @input="handleChange"
-                        :rules="min3chars"
-                        required
                         single-line
                       ></v-text-field>
                   </div>
@@ -50,7 +47,7 @@
                       ></v-text-field> 
                     <!--  <v-btn class="primary" @click="toggleOpen" :disabled="!isChanged"
                       >save</v-btn> -->
-                    <v-btn :disabled="!valid" class="primary" @click="searchEmail">search email</v-btn>  
+                    <v-btn :disabled="getValid()" class="primary" @click="searchEmail">search email</v-btn>  
                   </div>
                 </v-col>
                 <!-- <v-col cols="12" class="text-right pt-0">
@@ -196,6 +193,16 @@ export default {
         this.clonedlData.domain !== this.item.domain) {
         this.isChanged = true;
       }
+    },
+    getValid(){
+      console.log()
+      if(!this.valid){
+        return true;
+      }
+      if ((this.clonedlData.first_name === '' && this.clonedlData.last_name === '') ||  this.clonedlData.domain === ''){
+        return true;
+      }
+      return false;
     },
     randomIntFromInterval(min, max) { // min and max included 
       return Math.floor(Math.random() * (max - min + 1) + min)

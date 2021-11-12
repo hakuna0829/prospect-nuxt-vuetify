@@ -2,7 +2,7 @@
   <v-container id="login" class="fill-height justify-center" tag="section">
     <HorizontalHeader></HorizontalHeader>
     <v-row justify="center">
-      <v-col lg="5" sm="8" xl="7">
+      <v-col lg="5" sm="8" xl="4">
         <v-card class="elevation-4">
           <v-row>
             <v-col lg="12">

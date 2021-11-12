@@ -101,7 +101,7 @@
           color="black"
           style="padding-top:80px"
         >
-          The user has been successfully deleted
+          The list has been deleted.
         </v-snackbar>
       </v-card>
     </div>

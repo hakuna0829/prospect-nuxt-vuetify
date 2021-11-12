@@ -147,15 +147,19 @@
               <!-- <v-btn light class="mr-2 align-self-center mt-2 yellow-btn white--text" color="#F1C40F" >
                 <span>SEARCH</span>
               </v-btn> -->
-              <v-btn light class="mr-2 align-self-center mt-2 yellow-btn white--text" color="#F1C40F" @click="onClearAllFilters">
+              <!-- <v-btn light class="mr-2 align-self-center mt-2 yellow-btn white--text" color="#F1C40F" @click="onClearAllFilters">
                 <span>CLEAR ALL</span>
-              </v-btn>
+              </v-btn> -->
             </v-col>
             <v-col cols="6" md="4" xl="1" class="pt-0 d-flex justify-end"  order-md="2" order-xl="4">
                <v-btn color="primary align-self-center mt-2" @click="toggleOpen()">ADD PROSPECT</v-btn>
             </v-col>
          </v-row>
-         
+         <div class="text-center my-2 p-2 " v-if="selectAllPage">
+           All prospects {{selectedItem.length}} on this page are selected. 
+           <a class="" v-if="!selectAll" @click="selectAll=true">Select all {{data.length}} prospects.</a>
+           <a class="" v-else @click="clearSelection">Clear selection.</a>
+         </div>
         <v-data-table
           :headers="headers"
           :items="filteredData"
@@ -171,6 +175,9 @@
           <!-- <template v-slot:item.data-table-select="{ on, props }">
             <v-simple-checkbox color="green" v-bind="props" v-on="on"></v-simple-checkbox>
           </template> -->
+          <template v-slot:header.data-table-select="{ on, props }"> 
+            <v-simple-checkbox id="selectAll" :ripple="false" v-model="selectAllPage" @click="handleSelectAllPage" v-bind="props" v-on="on"></v-simple-checkbox>
+          </template>
           <template v-slot:item.id="{ item }">
             <div  class="d-flex align-center">
               <a v-if="item.linkedin_url" :href="item.linkedin_url"
@@ -540,7 +547,7 @@
           color="black"
           style="padding-top:80px"
         >
-          The user has been successfully deleted
+          The prospect has been deleted.
         </v-snackbar>
         <v-snackbar
           v-model="copy_list_snackbar"
@@ -567,6 +574,27 @@
               style="font-weight: 700"
               v-bind="attrs"
               @click="copy_list_snackbar = false"
+            >
+              Close
+            </v-btn>
+          </template>
+        </v-snackbar>
+        <v-snackbar
+          v-model="exporting_snackbar"
+          :timeout="-1"
+          top
+          right
+          color="black"
+          style="padding-top:80px"
+        >
+          Export triggered. Find the files in your browser's download folder.
+          <template v-slot:action="{ attrs }">
+            <v-btn
+              color="white"
+              text
+              style="font-weight: 700"
+              v-bind="attrs"
+              @click="exporting_snackbar = false"
             >
               Close
             </v-btn>
@@ -654,6 +682,7 @@ export default {
       selectedName: "",
       snackbar: false,
       copy_list_snackbar: false,
+      exporting_snackbar:  false,
       max25chars: v => v.length <= 25 || 'Input too long!',
       max200chars: v => v.length <= 200 || 'Input too long!',
       actionItems:['Copy to list', 'Export', 'Delete'],
@@ -662,6 +691,8 @@ export default {
       actionSubmit: false,
       subAction:'',
       selectedItem: [],
+      selectAll:false,
+      selectAllPage:false,
       selectedEmailObj: {},
       icons: { mdiDelete },
       id: window.location.pathname.split('/')[2], //this is the id from the browser
@@ -773,6 +804,11 @@ export default {
     contributors (items) {
       return items.map((item, i) => {return <p key={i}>{item}</p>})
     },
+    clearSelection(){
+      this.selectAll=false; 
+      // selectAllPage=false;  
+      document.getElementById('selectAll').click();
+    },
     saveEmail(update) {
       console.log(update, this.editEmail);
       this.filteredData.map(item => {
@@ -782,6 +818,9 @@ export default {
           return item;
         }
       })
+    },
+    handleSelectAllPage(){
+      console.log('value', this.selectAllPage)
     },
     // openEmail (oldEmail) {
     //   console.log(oldEmail);
@@ -851,6 +890,9 @@ export default {
         console.log('this.mainAction', this.mainAction)
         if(this.mainAction === 'Copy to list'){
           this.copy_list_snackbar = true
+        }
+        if(this.mainAction === 'Export'){
+          this.exporting_snackbar = true
         }
         if( this.mainAction === 'Delete' )
         {

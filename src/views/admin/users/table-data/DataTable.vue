@@ -5,15 +5,10 @@
   <div>
     <div class="">
       <v-card style="box-shadow:none">
-        <v-row align="center">
-          <v-col class="grow"></v-col>
-          <v-col class="shrink">
-            <v-btn color="primary" to="/admin/new-user">Add User</v-btn>
-          </v-col>
-        </v-row>
+        
 
         <v-row>
-          <v-col cols="12" xl="4" class="d-flex">
+          <v-col cols="12" sm="8" lg="5" xl="4" class="d-flex order-xl-1 order-sm-1 order-1">
             <v-menu>
               <template v-slot:activator="{ on, attrs }">
                 <v-btn
@@ -64,7 +59,7 @@
               v-if="actionSubmit"
             ></v-progress-circular>
           </v-col>
-          <v-col cols="12" sm="12" lg="10" xl="7" class=" py-0">
+          <v-col cols="12" sm="12" lg="6" xl="7" class=" py-0 order-lg-2 order-sm-3 order-2">
             <div class="d-flex">
               <v-btn light class="mr-2 align-self-center mb-2 yellow-btn white--text" color="#F1C40F" >
                 <span>Export</span>
@@ -74,7 +69,7 @@
                 v-model="filterField"
                 label="Filter by"
                 :full-width="false"
-                class="me-1 me-md-2"
+                class="me-1 me-md-2 input-custom"
               >
               </v-select>
               <v-select
@@ -82,7 +77,7 @@
                 v-model="filterOperator"
                 label="Operator"
                 :full-width="false"
-                class="me-1 me-md-2"
+                class="me-1 me-md-2 input-custom"
               />
               <v-text-field
                 v-show="filterOperator && filterType !== 'lookup'"
@@ -93,7 +88,7 @@
                 return-masked-value
                 v-model="filterTerm"
                 hide-details="auto"
-                class="me-1 me-md-2"
+                class="me-1 me-md-2 input-custom"
               />
               
               <v-text-field
@@ -103,6 +98,7 @@
                 :mask="filterTermMask"
                 :rules='filterTermRules'
                 return-masked-value
+                 class="me-1 me-md-2 input-custom"
                 v-model="filterTerm2"
               ></v-text-field>
 
@@ -111,17 +107,19 @@
                 :items="filterLookupItems"
                 :label="filterLookupLabel"
                 v-model="filterLookupValue"
+                class="me-1 me-md-2 input-custom"
               ></v-autocomplete>
               
             </div>
           </v-col>
-          <v-col sm="12" lg="2" xl="1" class="pt-0">
+          <v-col cols="12" sm="4" lg="1" xl="1" class="pt-0 d-flex justify-end align-center order-sm-2 order-lg-3 order-3">
             <!-- <v-btn light class="mr-2 align-self-center mt-2 yellow-btn white--text" color="#F1C40F" >
               <span>SEARCH</span>
             </v-btn> -->
-            <v-btn light class="mr-2 align-self-center mt-2 yellow-btn white--text" color="#F1C40F" @click="onClearAllFilters">
+            <!-- <v-btn light class="mr-2 align-self-center mt-2 yellow-btn white--text" color="#F1C40F" @click="onClearAllFilters">
               <span>CLEAR ALL</span>
-            </v-btn>
+            </v-btn> -->
+            <v-btn color="primary" to="/admin/new-user" class="mr-2 align-self-end mt-2 yellow-btn white--text">Add User</v-btn>
           </v-col>
         </v-row>
         <v-data-table
@@ -601,7 +599,9 @@ export default {
     margin: 0px;
   }
 }
-
+.input-custom {
+  max-width: 150px;
+}
 .actionBtn {
     border: #4180FF solid 1px;
     width: 130px;

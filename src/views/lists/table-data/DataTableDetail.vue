@@ -156,8 +156,8 @@
             </v-col>
          </v-row>
          <div class="text-center my-2 p-2 " v-if="selectAllPage">
-           All prospects {{selectedItem.length}} on this page are selected. 
-           <a class="" v-if="!selectAll" @click="selectAll=true">Select all {{data.length}} prospects.</a>
+           All {{selectedItem.length}} records are selected. 
+           <a class="" v-if="!selectAll" @click="selectAll=true">Select all {{data.length}} records.</a>
            <a class="" v-else @click="clearSelection">Clear selection.</a>
          </div>
         <v-data-table
@@ -821,6 +821,9 @@ export default {
     },
     handleSelectAllPage(){
       console.log('value', this.selectAllPage)
+      if(!this.selectAllPage){
+        this.selectAll = false;
+      }
     },
     // openEmail (oldEmail) {
     //   console.log(oldEmail);

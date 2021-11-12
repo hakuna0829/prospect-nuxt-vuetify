@@ -122,18 +122,27 @@
             <v-btn color="primary" to="/admin/new-user" class="mr-2 align-self-end mt-2 yellow-btn white--text">Add User</v-btn>
           </v-col>
         </v-row>
+        <div class="text-center my-2 p-2 " v-if="selectAllPage">
+          <span v-if="!selectAll">All {{selectedItem.length}} records are selected. </span>
+          <span v-else>All {{filteredData.length}} records are selected. </span>
+          <a class="" v-if="!selectAll" @click="selectAll=true">Select all {{filteredData.length}} records.</a>
+          <a class="" v-else @click="clearSelection">Clear selection.</a>
+        </div>
         <v-data-table
           :headers="headers"
           :items="filteredData"
           item-key="id"
           class="border"
           show-select
-          v-model="selectedRows"
+          v-model="selectedItem"
            :options="options"
           :footer-props="{
             'items-per-page-options': [10, 25, 50, 100, -1]
           }"
         >
+         <template v-slot:header.data-table-select="{ on, props }"> 
+            <v-simple-checkbox id="selectAll" :ripple="false" @click="handleSelectAllPage" v-model="selectAllPage" v-bind="props" v-on="on"></v-simple-checkbox>
+          </template>
         
           <template v-slot:item.avartar="{ item }">
             <img :src="item.avartar" alt="" width="30px" />
@@ -203,7 +212,6 @@ export default {
       itemsPerPage: 25
     }, 
     selectedName: "",
-    selectedRows: [],
     snackbar: false,
     action_snackbar: false,
     actionItems:['Change plan', 'Add credits', 'Delete user'],
@@ -212,22 +220,31 @@ export default {
     subAction:'',
     actionSubmit: false,
     headers: [
-      { text: "", value: "avartar", filterable: false },
-      { text: "User email", sortable: true, value: "email" },
-      { text: "First Name", value: "firstName", filterable: false },
-      { text: "Last Name", value: "lastName", filterable: false },
-      { text: "Type", value: "type", filterable: false },
-      { text: "Access to credits", value: "access", filterable: false },
-      { text: "Credits used", value: "credits_used", filterable: false },
-      { text: "", value: "remove", filterable: false, sortable: false }
+      // { text: "", value: "avartar", filterable: false },
+      { text: "Full name", value: "fullName", filterable: false, class: 'text-no-wrap' },
+      { text: "Email", sortable: true, value: "email", class: 'text-no-wrap' },
+      { text: "Login", sortable: true, value: "login", class: 'text-no-wrap' },
+      { text: "Plan", sortable: true, value: "plan", class: 'text-no-wrap' },
+      { text: "Type", value: "type", filterable: false , class: 'text-no-wrap'},
+      { text: "Joined", value: "joined", filterable: false, class: 'text-no-wrap' },
+      { text: "Purchased", value: "purchased", sortable: true, class: 'text-no-wrap' },
+      { text: "Credits left", value: "credits", sortable: true , class: 'text-no-wrap'},
+      { text: "Lists", value: "lists", sortable: true, class: 'text-no-wrap' },
+      { text: "Total unique prospects", value: "total", filterable: false, class: 'text-no-wrap' },
+      { text: "", value: "remove", filterable: false, sortable: false, class: 'text-no-wrap' }
     ],
     filterFields: [
-        {text: 'First', value: 'firstName', type: 'text'},
-        {text: 'Last', value: 'lastName', type: 'text'},
-        {text: 'Emails', value: 'email', type: 'text'},
+        {text: 'Full name', value: 'fullName', type: 'text'},
+        {text: 'Email', value: 'email', type: 'text'},
+        {text: 'Login', value: 'login', type: 'text'},
+        {text: 'Plan', value: 'plan', type: 'text'},
         {text: 'Type', value: 'type', type: 'text'},
-        {text: 'Access', value: 'access', type: 'number'},
-        {text: 'Credits', value: 'credits_used', type: 'number'}
+        {text: 'Joined', value: 'joined', type: 'date'},
+        {text: 'Purchased', value: 'purchased', type: 'date'},
+        {text: 'Credits left', value: 'credits', type: 'number'},
+        {text: 'Lists', value: 'lists', type: 'number'},
+        {text: 'Total unique prospects', value: 'total', type: 'number'},
+        
     ],
     pagination: {
         sortBy: 'last_name',
@@ -262,6 +279,9 @@ export default {
     filterLookupLabel: '',
     icons: { mdiDelete },
     actionNotification: '',
+    selectedItem: [],
+    selectAll:false,
+    selectAllPage:false,
     data: json.data
   }},
   computed: {
@@ -359,6 +379,34 @@ export default {
       this.selectedName = "";
       this.showAlert = false;
     },
+    clearSelection(){
+      this.selectAll=false; 
+      // selectAllPage=false;  
+      document.getElementById('selectAll').click();
+    },
+    handleSelectAllPage(){
+      if(!this.selectAllPage){
+        this.selectAll = false;
+      }
+      let array1 = [];
+      for(var i=1; i< 200 ; i++){
+        let item = {
+          "id": i,
+          "fullName": 'Josh Mark',
+          "email":'osh@crystal.io',
+          "login": 'Google',
+          "plan": 'Pro',
+          "type": 'Monthly',
+          "joined": '9/25/2021 12:56:44 PM',
+          "purchased": '9/25/2021 1:00:33 PM',
+          "credits": 456,
+          "lists": 6,
+          "total": 452
+        }
+        array1.push(item);
+      }
+      console.log('new data', array1);
+    },
     toggleOpen() {
       this.$emit("changeOpen");
     },
@@ -370,7 +418,7 @@ export default {
       const index = this.data.indexOf(this.selectedName);
       this.data.splice(index, 1);
       this.selectedName = null;
-      this.selectedRows = [];
+      this.selectedItem = [];
       this.action_snackbar = true;
     },
     handleDeleteDlg() {
@@ -433,7 +481,7 @@ export default {
     },
     // ---------- Events ------------------------
     onClearAllFilters () {
-        this.filterField = 'firstName';
+        this.filterField = 'fullName';
         this.clearFilterTerms();
     },
     // ---------- field filter methods ----------
@@ -511,11 +559,17 @@ export default {
     filterByDateGreater (list, fieldName, fieldValue, format) {
       console.log(list, fieldName, fieldValue, format)
         format = format || this.dateFilterFormat
+        // var m = moment("25/9/2021 1:00:33 PM", 'DD MM YYYY hh:mm:ss A');
+        
+         const result = moment("25/09/2021 01:00:33", 'DD MM YYYY hh:mm:ss', true).isAfter(moment(fieldValue, format), 'day')
+
+        console.log('result', result)
         return list.filter(item => {
             if(item[fieldName] !== undefined) {
-                return moment(item[fieldName]).isAfter(moment(fieldValue, format), 'day')
+              let cDate= item[fieldName].split(' ')[0];
+              return moment(cDate, 'DD MM YYYY').isAfter(moment(fieldValue, format), 'day')
             } else {
-                return true
+              return true
             }
         })
     },
@@ -523,7 +577,8 @@ export default {
         format = format || this.dateFilterFormat
         return list.filter(item => {
             if(item[fieldName] !== undefined) {
-                return moment(item[fieldName]).isBefore(moment(fieldValue, format), 'day')
+              let cDate= item[fieldName].split(' ')[0];
+                return moment(cDate, 'DD MM YYYY').isSameOrBefore(moment(fieldValue, format), 'day')
             } else {
                 return true
             }
@@ -533,7 +588,8 @@ export default {
         format = format || this.dateFilterFormat
         return list.filter(item => {
             if(item[fieldName] !== undefined) {
-                return moment(item[fieldName]).isBetween(moment(fieldValue1, format), moment(fieldValue2, format), 'day', '[]')
+              let cDate= item[fieldName].split(' ')[0];
+                return moment(cDate, 'DD MM YYYY').isBetween(moment(fieldValue1, format), moment(fieldValue2, format), 'day', '[]')
             } else {
                 return true
             }
@@ -564,7 +620,7 @@ export default {
     DeleteDialog: () => import("../DeleteDialog")
   },
   created () {
-      this.filterField = 'firstName'
+      this.filterField = 'fullName'
   }
 };
 </script>

@@ -122,19 +122,29 @@
             <v-btn color="primary" to="/admin/new-company" class="mr-2 align-self-end mt-2 yellow-btn white--text">Add Company</v-btn>
           </v-col>
         </v-row>
+        <!--  -->
+        <div class="text-center my-2 p-2 " v-if="selectAllPage">
+          <span v-if="!selectAll">All {{selectedItem.length}} records are selected. </span>
+          <span v-else>All {{filteredData.length}} records are selected. </span>
+          <a class="" v-if="!selectAll" @click="selectAll=true">Select all {{filteredData.length}} records.</a>
+          <a class="" v-else @click="clearSelection">Clear selection.</a>
+        </div>
+        
         <v-data-table
           :headers="headers"
           :items="filteredData"
           item-key="id"
           class="border"
           show-select
-          v-model="selectedRows"
+          v-model="selectedItem"
            :options="options"
           :footer-props="{
             'items-per-page-options': [10, 25, 50, 100, -1]
           }"
         >
-        
+        <template v-slot:header.data-table-select="{ on, props }"> 
+            <v-simple-checkbox id="selectAll" :ripple="false" @click="handleSelectAllPage" v-model="selectAllPage" v-bind="props" v-on="on"></v-simple-checkbox>
+          </template>
           <template v-slot:item.logo="{item}">
             <img :src="item.logo" alt="" width="25px" />
           </template>
@@ -201,7 +211,6 @@ export default {
     return {
     showAlert: false,
     selectedName: "",
-    selectedRows: [],
     snackbar: false,
     action_snackbar: false,
     actionItems:['Change plan', 'Add seats', 'Delete company'],
@@ -211,19 +220,34 @@ export default {
     subAction:'',
     actionSubmit: false,
     headers: [
-      { text: "", value: "logo", filterable: false, sortable:false },
-      { text: "Company Name", value: "name", filterable: false },
-      { text: "Website URL", value: "siteUrl", filterable: false },
-      { text: "Address", value: "address", filterable: false },
-      { text: "City", value: "city", filterable: false },
-      { text: "Country", value: "country", filterable: false }
+      { text: "Company Name", value: "name", filterable: false, class: 'text-no-wrap' },
+      { text: "Admin", value: "admin", filterable: false, class: 'text-no-wrap' },
+      { text: "Email", value: "email", filterable: false, class: 'text-no-wrap' },
+      { text: "Plan", value: "plan", filterable: false, class: 'text-no-wrap' },
+      { text: "Commitment", value: "commitment", filterable: false, class: 'text-no-wrap' },
+      { text: "Seats available", value: "seats_available", filterable: false, class: 'text-no-wrap' },
+      { text: "Seats used", value: "seats_used", filterable: false, class: 'text-no-wrap' },
+      { text: "Price per seat", value: "price_per_seat", filterable: false, class: 'text-no-wrap' },
+      { text: "MRR", value: "mbr", filterable: false, class: 'text-no-wrap' },
+      { text: "ARR", value: "arr", filterable: false, class: 'text-no-wrap' },
+      { text: "Income so far", value: "income", filterable: false, class: 'text-no-wrap' },
+      { text: "Credits used so far", value: "credits", filterable: false, class: 'text-no-wrap' },
+      { text: "EVS credits used so far", value: "evs", filterable: false, class: 'text-no-wrap' }
     ],
     filterFields: [
-        {text: 'Name', value: 'name', type: 'text'},
-        {text: 'URL', value: 'siteUrl', type: 'text'},
-        {text: 'Address', value: 'address', type: 'text'},
-        {text: 'City', value: 'city', type: 'text'},
-        {text: 'Country', value: 'country', type: 'text'}
+        {text: 'Company Name', value: 'name', type: 'text'},
+        {text: 'Admin', value: 'admin', type: 'text'},
+        {text: 'Email', value: 'email', type: 'text'},
+        {text: 'Plan', value: 'plan', type: 'text'},
+        {text: 'Commitment', value: 'commitment', type: 'text'},
+        {text: 'Seats available', value: 'seats_available', type: 'number'},
+        {text: 'Seats used', value: 'seats_used', type: 'number'},
+        {text: 'Price per seat', value: 'price_per_seat', type: 'number'},
+        {text: 'MRR', value: 'mbr', type: 'number'},
+        {text: 'ARR', value: 'arr', type: 'number'},
+        {text: 'Income so far', value: 'income', type: 'number'},
+        {text: 'Credits used so far', value: 'credits', type: 'number'},
+        {text: 'EVS credits used so far', value: 'evs', type: 'number'},
     ],
     pagination: {
         sortBy: 'name',
@@ -250,6 +274,9 @@ export default {
     icons: { mdiDelete },
     actionNotification: '',
     data: json.data,
+    selectedItem: [],
+    selectAll:false,
+    selectAllPage:false,
     options: {
       itemsPerPage: 25
     }, 
@@ -318,13 +345,44 @@ export default {
       this.log(row);
       
     },
+    handleSelectAllPage(){
+      if(!this.selectAllPage){
+        this.selectAll = false;
+      }
+       let array1 = [];
+      for(var i=1; i< 200 ; i++){
+        let item = {
+          "id": i,
+          'name': 'SecuTix',
+          'admin': 'Josh Miner',
+          'email': 'josh@secutix.com', 
+          'plan': 'Pro',
+          'commitment': 'Annual',
+          'seats_available': 5,
+          'seats_used': 5, 
+          'price_per_seat': 69,
+          'mbr': 345,
+          'arr': 200,
+          'income': 120,
+          'credits': 30,
+          'evs': 50
+        }
+        array1.push(item);
+      }
+      console.log('new data', array1);
+    },
+    clearSelection(){
+      this.selectAll=false; 
+      // selectAllPage=false;  
+      document.getElementById('selectAll').click();
+    },
     swapSelectionStatus(keyID) {
-      if (this.selectedRows.includes(keyID)) {
-        this.selectedRows = this.selectedRows.filter(
+      if (this.selectedItem.includes(keyID)) {
+        this.selectedItem = this.selectedItem.filter(
           selectedKeyID => selectedKeyID !== keyID
         );
       } else {
-        this.selectedRows.push(keyID);
+        this.selectedItem.push(keyID);
       }
     },
     closeAlert() {
@@ -342,7 +400,7 @@ export default {
       const index = this.data.indexOf(this.selectedName);
       this.data.splice(index, 1);
       // this.selectedName = null;
-       this.selectedRows = [];
+       this.selectedItem = [];
       this.action_snackbar = true;
     },
     handleDeleteDlg() {
@@ -375,7 +433,7 @@ export default {
       console.log('change action', obj)
       this.mainAction = obj;
       this.subAction = '';
-      console.log(this.selectedRows)
+      console.log(this.selectedItem)
     },
     changeSubAction(obj){
       this.subAction = obj;
@@ -511,22 +569,14 @@ export default {
 </script>
 <style scoped lang="scss">
 @import "~vuetify/src/styles/settings/_variables";
+.customClass {
+  white-space: nowrap !important;
+}
 
 @media #{map-get($display-breakpoints, 'md-and-down')} {
-  .custom-class {
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    width: 300px;
-  }
+  
 }
 @media #{map-get($display-breakpoints, 'sm-and-down')} {
-  .custom-class {
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    width: 100px;
-  }
 }
 
 .email {

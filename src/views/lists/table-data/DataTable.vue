@@ -165,7 +165,7 @@ export default {
       this.$emit("changeOpen");
     },
     customSort(items, index, isDesc) {
-      console.log(items, index[0], isDesc, typeof index)
+      // console.log(items, index[0], isDesc, typeof index)
       items.sort((a, b) => {
           if(a.static === true ) return -1;
           if(b.static === true ) return 1;
